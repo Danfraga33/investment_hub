@@ -1,35 +1,37 @@
-"use client";
 // import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import MaxWidthWrapper from "../components/MaxWidthWrapper";
 import db from "@/db/page";
 import { useEffect } from "react";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
-const Dashboard = () => {
-  const { user } = useUser();
+import { currentUser } from "@clerk/nextjs";
+
+const Dashboard = async () => {
+  const user = await currentUser();
   console.log(user);
 
   if (!user?.primaryEmailAddress?.emailAddress || !user.id)
     redirect(`/auth-callback?origin=dashboard`);
 
-  // useEffect(() => {
-  //   const CheckIfUserIsInDatabase = async () => {
-  //     try {
-  //       const dbUser = await db.user.findFirst({
-  //         where: {
-  //           id: user.id,
-  //         },
-  //       });
+  try {
+    const dbUser = await db.user.findFirst({
+      where: {
+        id: Number(user.id),
+      },
+    });
+    if (!dbUser) redirect(`/auth-callback?origin=dashboard`);
+  } catch (err) {
+    console.error(err);
+  }
 
-  //       if (!dbUser) redirect("/auth-callback?origin=dashboard");
-  //     } catch (err) {
-  //       console.error("messsage:", err);
-  //     }
-  //   };
-  // }, []);
-
-  // const [sec, setSec] = useState("");
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -50,26 +52,7 @@ const Dashboard = () => {
   // }, []);
 
   // console.log(sec);
-  return (
-    <>
-      <MaxWidthWrapper>
-        <div className="flex">
-          <div id="portfolio" className="p-2 border border-blue-500 max-w-50">
-            <div>Portfolio</div>
-          </div>
-          <div className="border border-primary">
-            <div id="chart">Chart</div>
-          </div>
-        </div>
-        <div className="flex justify-center items-center h-[20rem]  ">
-          <div className="inline bg-blue-500 py-2 px-8 items-center text-lg text-white tracking-wide rounded-2xl ">
-            StockSelector
-            {/* <StockSelector /> */}
-          </div>
-        </div>
-      </MaxWidthWrapper>
-    </>
-  );
+  return <Dashboard />;
 };
 // const response = await fetch(
 //   `${url}${tslaUrl}item=${itemNumber}&token=${process.env.SEC_API_KEY}&type=${type}`,
