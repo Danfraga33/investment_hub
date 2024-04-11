@@ -1,13 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import type { NextAuthOptions } from "next-auth";
-
-const prisma = new PrismaClient();
 
 export const authOptions = NextAuth({
-  // adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID ?? "",
@@ -16,6 +10,7 @@ export const authOptions = NextAuth({
   ],
 });
 export { authOptions as GET, authOptions as POST };
+
 // callbacks: {
 //   async signIn({ account, profile }) {
 //     if (!profile?.email) {

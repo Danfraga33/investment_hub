@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
-import { ArrowRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { signIn, signOut, useSession } from "next-auth/react";
 
@@ -56,7 +55,7 @@ const Navbar = () => {
                     })}
                     onClick={() => signOut()}
                   >
-                    Sign Out
+                    Hi, {session.user?.name} - Sign Out
                   </button>
                 </>
               )}
