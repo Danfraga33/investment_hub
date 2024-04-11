@@ -55,7 +55,7 @@ const Navbar = () => {
                     })}
                     onClick={() => signOut()}
                   >
-                    Hi, {session.user?.name} - Sign Out
+                    Sign Out
                   </button>
                 </>
               )}

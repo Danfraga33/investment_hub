@@ -3,9 +3,7 @@
 import Dashboard from "../components/Dashboard";
 import { getServerSession } from "next-auth";
 
-const Page = async () => {
-  const session = await getServerSession();
-
+const Page = () => {
   return (
     <div className="mt-3">
       <Dashboard />;
