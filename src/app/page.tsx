@@ -21,7 +21,7 @@ export default function Home() {
         </p>
 
         <Link
-          href="/Dashboard"
+          href="/dashboard"
           className={buttonVariants({
             size: "lg",
             className: "mt-5",
