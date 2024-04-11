@@ -3,9 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "../lib/utils";
 import Navbar from "./components/Navbar";
-import { ClerkProvider } from "@clerk/nextjs";
-
+import { getServerSession } from "next-auth";
 const inter = Inter({ subsets: ["latin"] });
+import SessionProvider from "./components/SessionProvider";
 
 export const metadata: Metadata = {
   title: "Investment Hub",
@@ -16,14 +16,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
   return (
-    <ClerkProvider>
-      <html lang="en">
+    <html lang="en">
+      <SessionProvider session={session}>
         <body
           className={cn(
             "min-h-screen font-sans antialised grainy",
@@ -33,7 +34,7 @@ export default function RootLayout({
           <Navbar />
           {children}
         </body>
-      </html>
-    </ClerkProvider>
+      </SessionProvider>
+    </html>
   );
 }
