@@ -1,13 +1,12 @@
+"use client";
 import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { ArrowRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs";
+import { signIn, signOut, useSession } from "next-auth/react";
 
-const Navbar = async () => {
-  const user = await currentUser();
-
+const Navbar = () => {
+  const { data: session } = useSession();
   return (
     <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
       <MaxWidthWrapper>
@@ -27,15 +26,40 @@ const Navbar = async () => {
               >
                 Pricing
               </Link>
-              <Link
-                href="/dashboard"
-                className={buttonVariants({
-                  variant: "ghost",
-                  size: "sm",
-                })}
-              >
-                {!user?.id ? <SignInButton /> : "Dashboard"}
-              </Link>
+
+              {!session ? (
+                <button
+                  className={buttonVariants({
+                    variant: "ghost",
+                    size: "sm",
+                  })}
+                  onClick={() => signIn()}
+                >
+                  Sign In
+                </button>
+              ) : (
+                <>
+                  <Link href="/dashboard">
+                    <button
+                      className={buttonVariants({
+                        variant: "ghost",
+                        size: "sm",
+                      })}
+                    >
+                      Dashboard
+                    </button>
+                  </Link>
+                  <button
+                    className={buttonVariants({
+                      variant: "ghost",
+                      size: "sm",
+                    })}
+                    onClick={() => signOut()}
+                  >
+                    Sign Out
+                  </button>
+                </>
+              )}
 
               <Link
                 href="/dashboard"
@@ -44,7 +68,7 @@ const Navbar = async () => {
                   size: "sm",
                 })}
               >
-                <SignUpButton /> <ArrowRight className="ml-1 h-5 " />
+                {/* <SignUpButton /> <ArrowRight className="ml-1 h-5 " /> */}
               </Link>
             </>
           </div>
