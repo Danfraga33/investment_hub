@@ -27,7 +27,7 @@ export default async function RootLayout({
       <SessionProvider session={session}>
         <body
           className={cn(
-            "min-h-screen font-sans antialised grainy",
+            "min-h-screen font-sans bg-gray-50 antialised grainy",
             inter.className,
           )}
         >
