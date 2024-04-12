@@ -1,23 +1,18 @@
-const WebSocket = require("ws");
+//  // useEffect(() => {
+//   //   const fetchData = async () => {
+//   //     try {
+//   //       const response = await fetch(
+//   //         `https://api.sec-api.io/extractor?url=https://www.sec.gov/Archives/edgar/data/1318605/000156459021004599/tsla-10k_20201231.txt&item=8&token=7eb8303a3bdb5248b15e5ff835ed92e618c6ed592c119c885df68b018f3553d2&type=text`,
+//   //         // const response = await fetch(
+//   //         //   `https://api.sec-api.io/extractor?url=https://www.sec.gov/Archives/edgar/data/1318605/000156459021004599/tsla-10k_20201231.htm&item=${itemNumber}&token=${process.env.SEC_API_KEY}&type=${type}`,
+//   //         // );
+//   //       );
 
-const API_KEY = "YOUR_API"; // Replace this with your actual API key
-const STREAM_API_URL = "wss://stream.sec-api.io?apiKey=" + API_KEY;
-
-const ws = new WebSocket(STREAM_API_URL);
-
-ws.on("open", () => console.log("✅ Connected to:", STREAM_API_URL));
-ws.on("close", () => console.log("Connection closed"));
-ws.on("error", (err) => console.log("Error:", err.message));
-
-ws.on("message", (message) => {
-  const filings = JSON.parse(message.toString());
-  filings.forEach((filing) => {
-    console.log(
-      filing.id,
-      filing.cik,
-      filing.formType,
-      filing.filedAt,
-      filing.linkToFilingDetails,
-    );
-  });
-});
+//   //       const data = await response.text();
+//   //       setSec(data);
+//   //     } catch (err) {
+//   //       console.log(err);
+//   //     }
+//   //   };
+//   //   fetchData();
+//   // }, []);
