@@ -17,7 +17,7 @@ const Dashboard = () => {
               <li className="border-2 border-orange-400 rounded-lg py-0.5 px-0.5">
                 Portfolio 1
               </li>
-              <li className="border-2 border-orange-400 rounded-lg py-0.5 px-0.5">
+              <li className="flex items-center border-2 border-orange-400 rounded-lg py-0.5 px-0.5">
                 Portfolio 2
               </li>
               <li className="border-2 border-orange-400 rounded-lg py-0.5 px-0.5">
@@ -28,11 +28,11 @@ const Dashboard = () => {
           <div id="Stock Selection">
             <div id="heading" className="mb-2 pb-0.5">
               <h1 className="mb-0.5 text-lg">Stock Selection</h1>
-              <hr style={{ color: "black" }} />
+              <hr />
             </div>
             <ul className="flex flex-col gap-1 ">
-              <li className="border-2 border-gray-400 rounded-lg py-0.5 px-0.5">
-                <h2 className="ml-1">Stock 1</h2>
+              <li className="border-2 border-gray-400 rounded-lg py-0.5 px-0.5 ">
+                <h2 className="ml-1 ">Stock 1</h2>
               </li>
               <li className="border-2 border-gray-400 rounded-lg py-0.5 px-0.5">
                 <h2 className="ml-1">Stock 2</h2>
