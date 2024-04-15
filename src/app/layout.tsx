@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 import SessionProvider from "./components/SessionProvider";
 import { auth } from "@/lib/auth";
+import React from "react";
 export const metadata: Metadata = {
   title: "Investment Hub",
   description:
