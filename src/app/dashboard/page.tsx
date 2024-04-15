@@ -1,5 +1,4 @@
 import Dashboard from "../components/Dashboard";
-import { getServerSession } from "next-auth";
 
 const Page = async () => {
   return (

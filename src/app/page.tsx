@@ -3,11 +3,8 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import MaxWidthWrapper from "./components/MaxWidthWrapper";
 import { buttonVariants } from "@/components/ui/button";
-import { useSession } from "next-auth/react";
 
 export default function Home() {
-  const { data: session, status } = useSession();
-
   return (
     <div>
       <MaxWidthWrapper className="mb-12 mt-28 sm:mt-40 flex flex-col items-center justify-center text-center">
