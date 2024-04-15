@@ -3,10 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "../lib/utils";
 import Navbar from "./components/Navbar";
-import { getServerSession } from "next-auth";
 const inter = Inter({ subsets: ["latin"] });
 import SessionProvider from "./components/SessionProvider";
-
+import { auth } from "@/lib/auth";
 export const metadata: Metadata = {
   title: "Investment Hub",
   description:
@@ -21,7 +20,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
+  const session = await auth();
   return (
     <html lang="en">
       <SessionProvider session={session}>
