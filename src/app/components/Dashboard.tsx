@@ -51,12 +51,14 @@ const Dashboard = () => {
                   value={position}
                   onValueChange={setPosition}
                 >
-                  <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="top">
+                    Portfolio 1
+                  </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="bottom">
-                    Bottom
+                    Portfolio 2
                   </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="right">
-                    Right
+                    Portfolio 3
                   </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
