@@ -1,6 +1,6 @@
 import Dashboard from "../components/Dashboard";
 
-const Page = async () => {
+const Page = () => {
   return (
     <div className="mt-3">
       <Dashboard />;
