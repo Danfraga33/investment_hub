@@ -1,6 +1,31 @@
+"use client";
+import { BarChart4, NotebookPen } from "lucide-react";
 import MaxWidthWrapper from "./MaxWidthWrapper";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
+import { SelectGroup } from "@radix-ui/react-select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+
+// This data will come from the database. It was pass data/trigger the summarizer and visualizer.
 const Dashboard = () => {
+  const [position, setPosition] = useState("bottom");
+
   return (
     <MaxWidthWrapper>
       <div className="grid grid-cols-4 h-[25rem] gap-2">
@@ -13,32 +38,98 @@ const Dashboard = () => {
               <h1 className="mb-0.5 text-lg">Portfolio</h1>
               <hr style={{ color: "black" }} />
             </div>
-            <ul className="flex flex-col gap-1">
-              <li className="border-2 border-orange-400 rounded-lg py-0.5 px-0.5">
-                Portfolio 1
-              </li>
-              <li className="flex items-center border-2 border-orange-400 rounded-lg py-0.5 px-0.5">
-                Portfolio 2
-              </li>
-              <li className="border-2 border-orange-400 rounded-lg py-0.5 px-0.5">
-                Portfolio 3
-              </li>
-            </ul>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="w-full" variant="outline">
+                  Portfolio
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Select a Portfolio</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup
+                  value={position}
+                  onValueChange={setPosition}
+                >
+                  <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="bottom">
+                    Bottom
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="right">
+                    Right
+                  </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <div id="Stock Selection">
             <div id="heading" className="mb-2 pb-0.5">
               <h1 className="mb-0.5 text-lg">Stock Selection</h1>
               <hr />
             </div>
-            <ul className="flex flex-col gap-1 ">
-              <li className="border-2 border-gray-400 rounded-lg py-0.5 px-0.5 ">
-                <h2 className="ml-1 ">Stock 1</h2>
+            <ul className="flex flex-col gap-1">
+              <li className="font-medium border p-0.5 rounded-lg ">
+                <Select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Stock" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup className="flex gap-1 items-center">
+                      <SelectItem value="summary">
+                        <Button className="bg-white hover:bg-white transition-all">
+                          <NotebookPen color="blue" size={22} />
+                        </Button>
+                      </SelectItem>
+                      <SelectItem value="visualize">
+                        <Button className="bg-white hover:bg-white transition-all">
+                          <BarChart4 color="green" size={22} />
+                        </Button>
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </li>
-              <li className="border-2 border-gray-400 rounded-lg py-0.5 px-0.5">
-                <h2 className="ml-1">Stock 2</h2>
+              <li className="font-medium border p-0.5 rounded-lg ">
+                <Select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Stock" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup className="flex gap-1 items-center">
+                      <SelectItem value="summary">
+                        <Button className="bg-white hover:bg-white transition-all">
+                          <NotebookPen color="blue" size={22} />
+                        </Button>
+                      </SelectItem>
+                      <SelectItem value="visualize">
+                        <Button className="bg-white hover:bg-white transition-all">
+                          <BarChart4 color="green" size={22} />
+                        </Button>
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </li>
-              <li className="border-2 border-gray-400 rounded-lg py-0.5 px-0.5">
-                <h2 className="ml-1">Stock 3</h2>
+              <li className="font-medium border p-0.5 rounded-lg  ">
+                <Select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Stock" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup className="flex gap-1 items-center">
+                      <SelectItem value="summary">
+                        <Button className="bg-white hover:bg-white transition-all">
+                          <NotebookPen color="blue" size={22} />
+                        </Button>
+                      </SelectItem>
+                      <SelectItem value="visualize">
+                        <Button className="bg-white hover:bg-white transition-all">
+                          <BarChart4 color="green" size={22} />
+                        </Button>
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </li>
             </ul>
           </div>
