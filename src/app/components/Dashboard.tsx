@@ -77,12 +77,12 @@ const Dashboard = () => {
                     <SelectGroup className="flex gap-1 items-center">
                       <SelectItem value="summary">
                         <Button className="bg-white hover:bg-white transition-all">
-                          <NotebookPen color="blue" size={22} />
+                          <NotebookPen color="#444" size={20} />
                         </Button>
                       </SelectItem>
                       <SelectItem value="visualize">
                         <Button className="bg-white hover:bg-white transition-all">
-                          <BarChart4 color="green" size={22} />
+                          <BarChart4 color="green" size={20} />
                         </Button>
                       </SelectItem>
                     </SelectGroup>
@@ -98,12 +98,12 @@ const Dashboard = () => {
                     <SelectGroup className="flex gap-1 items-center">
                       <SelectItem value="summary">
                         <Button className="bg-white hover:bg-white transition-all">
-                          <NotebookPen color="blue" size={22} />
+                          <NotebookPen color="#444" size={20} />
                         </Button>
                       </SelectItem>
                       <SelectItem value="visualize">
                         <Button className="bg-white hover:bg-white transition-all">
-                          <BarChart4 color="green" size={22} />
+                          <BarChart4 color="green" size={20} />
                         </Button>
                       </SelectItem>
                     </SelectGroup>
@@ -119,12 +119,12 @@ const Dashboard = () => {
                     <SelectGroup className="flex gap-1 items-center">
                       <SelectItem value="summary">
                         <Button className="bg-white hover:bg-white transition-all">
-                          <NotebookPen color="blue" size={22} />
+                          <NotebookPen color="#444" size={20} />
                         </Button>
                       </SelectItem>
                       <SelectItem value="visualize">
                         <Button className="bg-white hover:bg-white transition-all">
-                          <BarChart4 color="green" size={22} />
+                          <BarChart4 color="green" size={20} />
                         </Button>
                       </SelectItem>
                     </SelectGroup>
