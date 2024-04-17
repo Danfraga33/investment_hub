@@ -2,7 +2,8 @@
 import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { buttonVariants } from "@/components/ui/button";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { UserNav } from "./DashboardComponents/UserNav";
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -48,15 +49,7 @@ const Navbar = () => {
                       Dashboard
                     </button>
                   </Link>
-                  <button
-                    className={buttonVariants({
-                      variant: "ghost",
-                      size: "sm",
-                    })}
-                    onClick={() => signOut()}
-                  >
-                    Sign Out
-                  </button>
+                  <UserNav />
                 </>
               )}
 
