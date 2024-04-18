@@ -65,7 +65,6 @@ type Portfolio = {
 };
 
 export function StocksTable({ portfolio }: Portfolio) {
-  console.log(portfolio);
   const stockList = companies.filter(
     (company) => company.Portfolio === portfolio,
   );
