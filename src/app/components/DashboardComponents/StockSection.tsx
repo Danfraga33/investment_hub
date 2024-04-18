@@ -1,3 +1,4 @@
+import * as Select from "@radix-ui/react-select";
 import {
   SelectContent,
   SelectGroup,
@@ -9,7 +10,6 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import { StocksTable } from "./StocksTable";
-import * as Select from "@radix-ui/react-select";
 
 const StockSection = () => {
   const [portfolio, setPortfolio] = useState("high-growth");
