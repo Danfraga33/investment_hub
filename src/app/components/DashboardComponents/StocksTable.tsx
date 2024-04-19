@@ -69,17 +69,18 @@ export function StocksTable({ portfolio }: Portfolio) {
     (company) => company.Portfolio === portfolio,
   );
   return (
-    <ScrollArea className="h-screen w-full rounded-md border p-2">
-      <h4 className="mb-4 text-sm font-medium leading-none">Companies</h4>
+    <ScrollArea className="h-full w-full rounded-md border p-2  ">
+      <h4 className="mb-4 text-sm font-medium leading-none  ">Companies</h4>
       {stockList.map((company) => (
-        <>
-          <Button className="w-full items-start text-start" variant="secondary">
-            <div key={company.Name} className="text-sm">
-              {company.Name}
-            </div>
+        <div key={company.Name}>
+          <Button
+            className="w-full items-start text-start "
+            variant="secondary"
+          >
+            {company.Name}
           </Button>
-          <Separator className="my-2" />
-        </>
+          <Separator className="my-2  " />
+        </div>
       ))}
     </ScrollArea>
   );
