@@ -4,6 +4,7 @@ import MaxWidthWrapper from "./MaxWidthWrapper";
 import { buttonVariants } from "@/components/ui/button";
 import { signIn, useSession } from "next-auth/react";
 import { UserNav } from "./DashboardComponents/UserNav";
+import StrategySwitch from "./Switch";
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -14,6 +15,8 @@ const Navbar = () => {
           <Link href="/" className="flex z-40 font-semibold">
             <span>Investment Hub</span>
           </Link>
+
+          <StrategySwitch />
           {/* To do: add mobile navbar */}
           <div className="hidden items-center space-x-4 sm:flex">
             <>
