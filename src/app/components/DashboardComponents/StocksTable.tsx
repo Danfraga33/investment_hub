@@ -1,6 +1,8 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
 
 const companies = [
   {
@@ -65,6 +67,9 @@ type Portfolio = {
 };
 
 export function StocksTable({ portfolio }: Portfolio) {
+  const [ticker, setTicker] = useState("");
+  // Ticker will be used in context
+
   const stockList = companies.filter(
     (company) => company.Portfolio === portfolio,
   );
@@ -76,10 +81,11 @@ export function StocksTable({ portfolio }: Portfolio) {
           <Button
             className="w-full items-start text-start "
             variant="secondary"
+            onClick={() => setTicker(company.Ticker)}
           >
             {company.Name}
           </Button>
-          <Separator className="my-2  " />
+          <Separator className="my-2" />
         </div>
       ))}
     </ScrollArea>
