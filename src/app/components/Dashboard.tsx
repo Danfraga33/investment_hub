@@ -1,7 +1,7 @@
 "use client";
 // import MaxWidthWrapper from "./MaxWidthWrapper";
-import RightSide from "./DashboardComponents/RightSide";
-import StockSection from "./DashboardComponents/StockSection";
+import Main from "./DashboardComponents/MainContent";
+import StockSection from "./DashboardComponents/SideBar";
 
 // This data will come from the database. It was pass data/trigger the summarizer and visualizer.
 const Dashboard = () => {
@@ -11,7 +11,7 @@ const Dashboard = () => {
         <StockSection />
       </div>
       <div className="col-span-3 h-full">
-        <RightSide />
+        <Main />
       </div>
     </div>
   );
