@@ -52,8 +52,7 @@ const StockSelector = () => {
     };
     fetchData();
   }, []);
-  console.log(stocks);
-  console.log(stocks?.length);
+
   return (
     <Select>
       <SelectTrigger className="w-[180px] text-black ">
