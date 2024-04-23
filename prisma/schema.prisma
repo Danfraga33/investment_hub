@@ -7,6 +7,7 @@
 generator client {
   provider = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
+  engineType = "library"
 }
 
 datasource db {
@@ -14,15 +15,8 @@ datasource db {
   url      = env("DATABASE_URL")  
   directUrl = env("DIRECT_URL")
 }
-// model User {
-//   id Int @id @default(autoincrement())
-//   email String @unique
-//   username String @unique
-//   name String 
-//   password String
-//   createdAt DateTime @default(now())
-//   updateAt DateTime @updatedAt
-// }
+
+
 
 model User {
   id            String          @id @default(cuid())
@@ -30,11 +24,39 @@ model User {
   email         String          @unique
   emailVerified DateTime?
   image         String?
+  portfolios Portfolio[]
   accounts      Account[]
   sessions      Session[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Portfolio {
+  id        String     @id @default(cuid())
+  name      String
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stocks    Stock[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Stock {
+  id          String     @id @default(cuid())
+  name        String
+  symbol      String     @unique
+  portfolioId String
+  portfolio   Portfolio  @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model StockDB {
+  id String @id @default(cuid())
+  Name String
+  Symbol String @unique 
+  Exchange String
 }
  
 model Account {
