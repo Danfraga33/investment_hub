@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import PdfChat from "./PdfChat";
 import Summarizer from "./Summarizer";
-import getData from "@/app/api/query/route";
 
 const Main = () => {
   const [chartOrSummarize, setChartOrSummarize] = useState("chart");
@@ -12,9 +11,29 @@ const Main = () => {
 
   useEffect(() => {
     const data = async () => {
-      const userData = await fetch("/api/query");
-      const { data } = await userData.json();
-      console.log(data);
+      try {
+        const queryObject = {
+          query: {
+            query_string: {
+              query: 'ticker:TSLA AND formType:"10-K"',
+            },
+          },
+          from: 0,
+          size: 5,
+          sort: [{ filedAt: { order: "desc" } }],
+        };
+        const userData = await fetch("/api/query", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(queryObject),
+        });
+        const { data } = await userData.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
     data();
   }, []);
