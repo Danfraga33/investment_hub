@@ -25,52 +25,44 @@ import {
 } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { Prisma } from "@prisma/client";
+
+type PortfolioWithStocks = Prisma.PortfolioGetPayload<{
+  include: { stocks: true };
+}>;
+
+///////////////////////////////
 
 const StockSection = () => {
-  const [portfolio, setPortfolio] = useState<string>("high-growth");
-  console.log(portfolio);
   const [portfolioId, setPortfolioId] = useState<string>("");
-  console.log(portfolioId);
+  const [portfolio, setPortfolio] = useState<PortfolioWithStocks[]>([]);
 
+  const selectedPortfolio = portfolio.find((item) => item.id === portfolioId);
+
+  function addPortfolio() {
+    /**
+     * Add to portfolio list
+     * With stocks shown
+     * USE A API ROUTE
+     */
+  }
+
+  /* GET PORTFOLIO DATA */
   useEffect(() => {
-    const fetchPortfolioId = async () => {
-      try {
-        const selectedPortfolio = await prisma.portfolio.findFirst({
-          where: {
-            name: portfolio,
-          },
-        });
-
-        if (selectedPortfolio) {
-          setPortfolioId(selectedPortfolio?.id); // Set the ID to the state
-        } else {
-          console.error("Portfolio not found");
-        }
-      } catch (error) {
-        console.error("Error fetching portfolio ID:", error);
-      }
+    const fetchPortfolioData = async () => {
+      const portfolioData = await fetch("/api/portfolioData");
+      const data = await portfolioData.json();
+      setPortfolio(data);
     };
+    fetchPortfolioData();
+  }, [portfolioId]);
 
-    fetchPortfolioId(); // Fetch the ID when component mounts or portfolioName changes
-  }, [portfolio]);
-
-  // Check if there is a portfolio with same name. If yes, return an error - if no add a portfolio
-  //   const savePortfolio = async  () => {
-  //     const addToPortfolio = await db.portfolio.create({
-  //       data: {
-  //         name:
-
-  //      }
-  //    })
-  //  }
   return (
     <>
       <div className="flex flex-col justify-between p-2 border rounded-lg border-r-2 border-b-2 border-gray-400 gap-2 h-full ">
         <div>
           <div className="flex gap-2 items-center justify-between py-1">
-            <Select.Root onValueChange={setPortfolio}>
+            <Select.Root onValueChange={setPortfolioId}>
               <SelectTrigger className="w-full">
                 <SelectValue
                   placeholder="Select a portfolio"
@@ -81,13 +73,15 @@ const StockSection = () => {
                 <SelectGroup>
                   <SelectLabel>Portfolio</SelectLabel>
                   <Separator className="my-1 mx-4" />
-
-                  <SelectItem value="high-growth" className="font-semibold">
-                    High Growth Tech
-                  </SelectItem>
-                  <SelectItem value="defensive" className="font-semibold">
-                    Defensive
-                  </SelectItem>
+                  {portfolio.map((portfolio) => (
+                    <SelectItem
+                      key={portfolio.id}
+                      value={portfolio.id}
+                      className="font-semibold"
+                    >
+                      {portfolio.name}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select.Root>
@@ -113,14 +107,21 @@ const StockSection = () => {
                 </div>
                 <SheetFooter>
                   <SheetClose asChild>
-                    <Button type="submit">Save changes</Button>
+                    <Button type="submit" onClick={() => addPortfolio()}>
+                      Save changes
+                    </Button>
                   </SheetClose>
                 </SheetFooter>
               </SheetContent>
             </Sheet>
           </div>
           <ScrollArea className="h-80 w-full rounded-md border">
-            <StocksTable portfolioId={portfolioId} />
+            {portfolio.length > 0 &&
+              (selectedPortfolio && selectedPortfolio.stocks ? (
+                <StocksTable portfolioStocks={selectedPortfolio.stocks} />
+              ) : (
+                <p>Please select a portfolio.</p>
+              ))}
           </ScrollArea>
         </div>
         <ChatToPDFButton />
