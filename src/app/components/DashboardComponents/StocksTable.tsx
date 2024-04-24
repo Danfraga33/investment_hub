@@ -14,83 +14,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Plus } from "lucide-react";
+import type { Stock } from "@prisma/client";
 
-const stocks = [
-  {
-    Ticker: "AAPL",
-    Name: "Apple ",
-    Price: "$100",
-    Portfolio: "high-growth",
-  },
-  {
-    Ticker: "AMZN",
-    Name: "Amazon",
-    Price: "$150",
-    Portfolio: "high-growth",
-  },
-  {
-    Ticker: "GOOGL",
-    Name: "Alphabet ",
-    Price: "$175",
-    Portfolio: "high-growth",
-  },
-  {
-    Ticker: "MSFT",
-    Name: "Microsoft",
-    Price: "$120",
-    Portfolio: "defensive",
-  },
-  {
-    Ticker: "TSLA",
-    Name: "Tesla ",
-    Price: "$250",
-    Portfolio: "high-growth",
-  },
-  {
-    Ticker: "FB",
-    Name: "Facebook ",
-    Price: "$180",
-    Portfolio: "high-growth",
-  },
-  {
-    Ticker: "NFLX",
-    Name: "Netflix ",
-    Price: "$200",
-    Portfolio: "high-growth",
-  },
-  {
-    Ticker: "NVDA",
-    Name: "NVIDIA ",
-    Price: "$190",
-    Portfolio: "defensive",
-  },
-  {
-    Ticker: "PYPL",
-    Name: "PayPal",
-    Price: "$130",
-    Portfolio: "defensive",
-  },
-  { Ticker: "V", Name: "Visa", Price: "$160", Portfolio: "defensive" },
-];
+export function StocksTable({ portfolioStocks }: { portfolioStocks: Stock[] }) {
+  console.log(portfolioStocks);
 
-type portfolioId = {
-  portfolioId: string;
-};
-
-export function StocksTable({ portfolioId }: portfolioId) {
-  // This will find all stocks that have the same portfolio
-  // useEffect(() => {
-  // const portfolioData = async() => {
-
-  // const stockDisplay = await db.stock.findMany({
-  //   where: { portfolioId: portfolio },
-  // });
-  // }
-
-  // })
-  const stockList = stocks.filter(
-    (company) => company.Portfolio === portfolioId,
-  );
   return (
     <ScrollArea className="h-full w-full rounded-md border p-2">
       <div className="mb-4 px-2 py-1 flex items-center justify-between">
@@ -132,13 +60,13 @@ export function StocksTable({ portfolioId }: portfolioId) {
         </Sheet>
       </div>
 
-      {stockList.map((company) => (
-        <div key={company.Name}>
+      {portfolioStocks.map((company) => (
+        <div key={company.id}>
           <Button
             className="w-full items-start text-start "
             variant="secondary"
           >
-            {company.Name}
+            {company.name}
           </Button>
           <Separator className="my-2" />
         </div>
