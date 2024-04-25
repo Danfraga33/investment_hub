@@ -1,6 +1,6 @@
 "use client";
 // import MaxWidthWrapper from "./MaxWidthWrapper";
-import Main from "./DashboardComponents/MainContent";
+import Main from "./DashboardComponents/MainContent/MainContent";
 import StockSection from "./DashboardComponents/SideBar";
 
 // This data will come from the database. It was pass data/trigger the summarizer and visualizer.
