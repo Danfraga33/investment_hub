@@ -38,13 +38,37 @@ const StockSection = () => {
   const [portfolio, setPortfolio] = useState<PortfolioWithStocks[]>([]);
 
   const selectedPortfolio = portfolio.find((item) => item.id === portfolioId);
+  console.log(selectedPortfolio);
 
-  function addPortfolio() {
+  function AddToCurrentPortfolio(symbol: string, name: string) {
     /**
-     * Add to portfolio list
-     * With stocks shown
-     * USE A API ROUTE
+     * Add to stocks through a post req
+     * Saved in same portfolio
      */
+    console.log({ portfolioId, symbol, name });
+    const addStock = async () => {
+      try {
+        const response = await fetch("/api/portfolioData", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ portfolioId, symbol, name }),
+        });
+
+        console.log("Adding to portfolio:", portfolioId, name);
+        if (!response.ok) {
+          throw new Error("Failed to add stock to portfolio.");
+        }
+
+        console.log("Successfully added stock.");
+        // setPortfolio((prev) => [...prev, response.body]);
+      } catch (error) {
+        console.error("Error adding stock to portfolio:", error);
+      }
+    };
+
+    addStock();
   }
 
   /* GET PORTFOLIO DATA */
@@ -107,9 +131,7 @@ const StockSection = () => {
                 </div>
                 <SheetFooter>
                   <SheetClose asChild>
-                    <Button type="submit" onClick={() => addPortfolio()}>
-                      Save changes
-                    </Button>
+                    <Button type="submit">Save changes</Button>
                   </SheetClose>
                 </SheetFooter>
               </SheetContent>
@@ -118,7 +140,10 @@ const StockSection = () => {
           <ScrollArea className="h-80 w-full rounded-md border">
             {portfolio.length > 0 &&
               (selectedPortfolio && selectedPortfolio.stocks ? (
-                <StocksTable portfolioStocks={selectedPortfolio.stocks} />
+                <StocksTable
+                  portfolio={selectedPortfolio}
+                  AddToCurrentPortfolio={AddToCurrentPortfolio}
+                />
               ) : (
                 <p>Please select a portfolio.</p>
               ))}
