@@ -1,20 +1,21 @@
 "use client";
 // import MaxWidthWrapper from "./MaxWidthWrapper";
 import Main from "./DashboardComponents/MainContent/MainContent";
-import StockSection from "./DashboardComponents/SideBar";
+import SideBar from "./DashboardComponents/SideBar";
+import { PortfolioWithStocks } from "@/app/dashboard/page";
 
-// This data will come from the database. It was pass data/trigger the summarizer and visualizer.
-const Dashboard = () => {
+export type DashboardProps = {
+  collectionOfPortfolios: PortfolioWithStocks[];
+};
+export default function Dashboard({ collectionOfPortfolios }: DashboardProps) {
   return (
     <div className="grid grid-cols-4 gap-1 h-full">
       <div className="col-span-1 h-full">
-        <StockSection />
+        <SideBar collectionOfPortfolios={collectionOfPortfolios} />
       </div>
       <div className="col-span-3 h-full">
         <Main />
       </div>
     </div>
   );
-};
-
-export default Dashboard;
+}
