@@ -1,4 +1,5 @@
 "use client";
+import { Portfolio } from "@/app/components/DashboardComponents/StocksTable";
 import * as React from "react";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
@@ -54,15 +55,11 @@ const frameworks: Portfolio[] = [
     symbol: "qwe",
   },
 ];
-type Portfolio = {
-  symbol: string;
-  label: string;
-  value: string;
-};
-export function ComboboxDemo({ portfolio, AddToCurrentPortfolio }) {
+
+export function ComboboxDemo({ selectedPortfolio }: Portfolio) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<Portfolio | undefined>(undefined);
-  console.log(value);
+  console.log(selectedPortfolio);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -123,7 +120,7 @@ export function ComboboxDemo({ portfolio, AddToCurrentPortfolio }) {
         <DialogFooter>
           <Button
             type="submit"
-            onClick={() => AddToCurrentPortfolio(value?.symbol, value?.label)}
+            // onClick={() => AddToCurrentPortfolio(value?.symbol, value?.label)}
           >
             Save changes
           </Button>
