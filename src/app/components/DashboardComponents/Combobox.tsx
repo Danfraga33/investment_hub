@@ -28,7 +28,7 @@ import {
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
-const frameworks: Portfolio[] = [
+const frameworks = [
   {
     value: "next.js",
     label: "Next.js",
