@@ -42,7 +42,7 @@ const Navbar = () => {
                 </button>
               ) : (
                 <>
-                  <Link href="/dashboard">
+                  <Link href="/Dashboard">
                     <button
                       className={buttonVariants({
                         variant: "ghost",
@@ -57,7 +57,7 @@ const Navbar = () => {
               )}
 
               <Link
-                href="/dashboard"
+                href="/Dashboard"
                 className={buttonVariants({
                   variant: "ghost",
                   size: "sm",
