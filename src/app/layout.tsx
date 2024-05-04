@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 import SessionProvider from "./components/SessionProvider";
 import { auth } from "@/lib/auth";
 import React from "react";
+import { Sidebar } from "./components/DashboardComponents/Block/Sidebar";
 export const metadata: Metadata = {
   title: "Investment Hub",
   description:
@@ -31,6 +32,8 @@ export default async function RootLayout({
             inter.className,
           )}
         >
+          <Sidebar />
+
           <Navbar />
           {children}
         </body>
