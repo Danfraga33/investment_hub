@@ -55,16 +55,6 @@ const Navbar = () => {
                   <UserNav />
                 </>
               )}
-
-              <Link
-                href="/Dashboard"
-                className={buttonVariants({
-                  variant: "ghost",
-                  size: "sm",
-                })}
-              >
-                {/* <SignUpButton /> <ArrowRight className="ml-1 h-5 " /> */}
-              </Link>
             </>
           </div>
         </div>
