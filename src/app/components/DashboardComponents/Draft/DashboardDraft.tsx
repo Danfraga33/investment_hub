@@ -1,11 +1,11 @@
 "use client";
 // import MaxWidthWrapper from "./MaxWidthWrapper";
-import Main from "../MainContent/MainContent";
-import SideBar from "./SideBar";
-import { PortfolioWithStocks } from "@/app/Dashboard/page";
+import Main from "./MainContent/MainContent";
+import SideBar from "./SideBarDraft";
 import { StocksTable } from "./StocksTable";
 import { useSearchParams } from "next/navigation";
 import { StockDB } from "@prisma/client";
+import { PortfolioWithStocks } from "@/app/Dashboard/Insights/page";
 
 export type DashboardProps = {
   collectionOfPortfolios: PortfolioWithStocks[];
