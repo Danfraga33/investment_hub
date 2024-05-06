@@ -1,56 +1,113 @@
-import React from "react";
-import { Progress } from "@/components/ui/progress";
+"use client";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-export const Cards = () => {
+import { useSearchParams } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  PortfolioWithStocks,
+  epsSupriseProps,
+} from "@/app/Dashboard/Insights/page";
+export const Cards = ({
+  collectionOfPortfolios = [],
+  currentPrice,
+  percentageChange,
+  epsSuprise,
+}: {
+  epsSuprise: epsSupriseProps;
+  percentageChange: number;
+  currentPrice: number;
+  collectionOfPortfolios: PortfolioWithStocks[];
+}) => {
+  const searchParams = useSearchParams();
+  const portfolioIdParams = searchParams.get("p");
+  let stockIdParams = searchParams.get("s");
+  const selectedPortfolio = collectionOfPortfolios?.find(
+    (portfolio) => portfolio.id === portfolioIdParams,
+  );
+
+  const selectedStock = selectedPortfolio?.stocks.find(
+    (stock) => stock.id === stockIdParams,
+  );
+
   return (
     <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
       <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
-        <CardHeader className="pb-3">
-          <CardTitle>Portfolio Name</CardTitle>
-          <CardDescription className="max-w-lg text-balance leading-relaxed">
-            Portfolio Description: (AI GENERATED BASED ON WHATS IN THE
-            PORTFOLIO)
-          </CardDescription>
-        </CardHeader>
-        <CardFooter>
-          <Button>Save Portfolio</Button>
-        </CardFooter>
+        {selectedStock ? (
+          <CardHeader className="pb-3">
+            <CardTitle>
+              {selectedStock.name} {selectedStock.symbol}
+            </CardTitle>
+            <CardDescription className="max-w-lg text-balance leading-relaxed">
+              Apple is a technology company specializing in consumer
+              electronics, software, and digital services, generating revenue
+              from iPhone, iPad, MacBook, and related services.
+            </CardDescription>
+          </CardHeader>
+        ) : (
+          <>
+            <div className="h-full flex items-center space-x-4 w-full">
+              <div className="space-y-2 p-4">
+                <Skeleton className="h-10 w-[250px]" />
+                <Skeleton className="h-4 w-[400px]" />
+                <Skeleton className="h-4 w-[400px]" />
+                <Skeleton className="h-4 w-[400px]" />
+              </div>
+            </div>
+          </>
+        )}
       </Card>
       <Card x-chunk="dashboard-05-chunk-1">
         <CardHeader className="pb-2">
-          <CardDescription>This Week</CardDescription>
-          <CardTitle className="text-4xl">$1,329</CardTitle>
+          <CardDescription>Current Price</CardDescription>
+          <CardTitle className="text-4xl">
+            {currentPrice ? (
+              `$${currentPrice.toFixed(2)}`
+            ) : (
+              <Skeleton className="h-10 w-20" />
+            )}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-xs text-muted-foreground">
-            +25% from last week
+            {percentageChange ? (
+              <div className="flex">
+                <h1 className="font-medium">{percentageChange.toFixed(2)}</h1>%
+                from yesterday
+              </div>
+            ) : (
+              <Skeleton className="w-2 h-2" />
+            )}
           </div>
         </CardContent>
-        <CardFooter>
-          <Progress value={25} aria-label="25% increase" />
-        </CardFooter>
       </Card>
       <Card x-chunk="dashboard-05-chunk-2">
         <CardHeader className="pb-2">
-          <CardDescription>This Month</CardDescription>
-          <CardTitle className="text-4xl">$5,329</CardTitle>
+          <CardDescription>EPS Suprise</CardDescription>
+          <CardTitle className="text-4xl">
+            ${epsSuprise ? epsSuprise.actual : <Skeleton className="h-4 w-8" />}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-xs text-muted-foreground">
-            +10% from last month
+            {epsSuprise ? (
+              <div className="flex">
+                <h1>Suprise: </h1>
+                <h1 className="font-medium">
+                  {" "}
+                  {epsSuprise.surprisePercent.toFixed(2)}
+                </h1>
+                %
+              </div>
+            ) : (
+              <Skeleton className="h-4 w-8" />
+            )}
           </div>
         </CardContent>
-        <CardFooter>
-          <Progress value={12} aria-label="12% increase" />
-        </CardFooter>
       </Card>
     </div>
   );
