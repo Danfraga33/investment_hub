@@ -24,7 +24,7 @@ const InsightsPage = ({
   percentageChange: number;
   currentPrice: number;
   collectionOfPortfolios: PortfolioWithStocks[];
-  stocksDB: StockDB;
+  stocksDB: StockDB[];
 }) => {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">

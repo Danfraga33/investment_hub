@@ -62,22 +62,12 @@ export const StockList = ({
   // localStorage.setItem("portfolioId", collectionOfPortfolios[0].id);
   ////
   const searchParams = useSearchParams();
-  const [portfolioId, setportfolioId] = useState(collectionOfPortfolios[0].id);
   const [portfolioName, setPortfolioName] = useState(
     collectionOfPortfolios[0].name,
   );
   const router = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
-  /////
-  // function handlePortfolioSelection(stockId: string) {
-  //   const updatedSearchParams = new URLSearchParams(searchParams);
-  //   updatedSearchParams.set("p", portfolioId);
-  //   updatedSearchParams.set("s", stockId);
-  //   startTransition(() => {
-  //     router.replace(`${pathname}?${updatedSearchParams.toString()}`);
-  //   });
-  // }
   function handlePortfolioSelection(portfolioName: string) {
     const selectedPortfolio = collectionOfPortfolios.find(
       (portfolio) => portfolio.name === portfolioName,
