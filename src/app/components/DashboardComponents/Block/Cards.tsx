@@ -26,9 +26,10 @@ export const Cards = ({
   const searchParams = useSearchParams();
   const portfolioIdParams = searchParams.get("p");
   let stockIdParams = searchParams.get("s");
-  const selectedPortfolio = collectionOfPortfolios?.find(
+  let selectedPortfolio = collectionOfPortfolios?.find(
     (portfolio) => portfolio.id === portfolioIdParams,
   );
+  if (!selectedPortfolio) selectedPortfolio = collectionOfPortfolios[0];
 
   const selectedStock = selectedPortfolio?.stocks.find(
     (stock) => stock.id === stockIdParams,
