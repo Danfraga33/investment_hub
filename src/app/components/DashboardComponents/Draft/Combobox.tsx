@@ -79,7 +79,6 @@ export function ComboboxDemo({ stocksDB }: ComboBoxProps) {
                     key={stock.id}
                     value={stock.Name}
                     onSelect={() => {
-                      console.log("Selected stock:", stock.Name);
                       setValue(stock.Name);
                       setOpen(false);
                     }}
