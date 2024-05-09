@@ -8,7 +8,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -29,13 +37,14 @@ import { StockDB } from "@prisma/client";
 import {
   AreaChart,
   Check,
-  ChevronsUpDown,
-  Command,
+  ChevronDown,
+  MoreVertical,
   PencilLine,
   Plus,
+  X,
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useTransition } from "react";
 import { PortfolioWithStocks } from "./DashboardPages/Insights";
 import {
@@ -44,12 +53,22 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
+  Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { AddPortfolio, AddStock, DeleteStock } from "../../DashboardData";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export const StockList = ({
   collectionOfPortfolios,
@@ -58,16 +77,19 @@ export const StockList = ({
   stocksDB: StockDB[];
   collectionOfPortfolios: PortfolioWithStocks[];
 }) => {
-  // To share with other pages
-  // localStorage.setItem("portfolioId", collectionOfPortfolios[0].id);
-  ////
-  const searchParams = useSearchParams();
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
   const [portfolioName, setPortfolioName] = useState(
     collectionOfPortfolios[0].name,
   );
+  const [stockSymbol, setStockSymbol] = useState("BHP");
+  const [newPortfolioName, setNewPortfolioName] = useState("");
+  const [isPending, startTransition] = useTransition();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const [isPending, startTransition] = useTransition();
+
+  // Portfolio Selection
   function handlePortfolioSelection(portfolioName: string) {
     const selectedPortfolio = collectionOfPortfolios.find(
       (portfolio) => portfolio.name === portfolioName,
@@ -81,6 +103,8 @@ export const StockList = ({
       router.replace(`${pathname}?${updatedSearchParams.toString()}`);
     });
   }
+
+  // Stock Selection
   function handleStockSelection(stockId: string) {
     const selectedPortfolio = collectionOfPortfolios.find(
       (portfolio) => portfolio.name === portfolioName,
@@ -94,27 +118,33 @@ export const StockList = ({
     });
   }
 
-  const selectedPortfolio = collectionOfPortfolios?.filter(
+  // Selected Portfolio
+  const selectedPortfolio: PortfolioWithStocks = collectionOfPortfolios?.filter(
     (portfolio) => portfolio.name === portfolioName,
   )[0];
-  const stocks = selectedPortfolio?.stocks;
 
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
-  function capitalizeEveryWord(sentence: string) {
-    const words = sentence.split(" ");
-
-    const capitalizedWords = words.map((word: string) => {
-      if (word.length === 0) return word;
-      const firstLetter = word.charAt(0).toUpperCase();
-      const restOfWord = word.slice(1).toLowerCase();
-      return firstLetter + restOfWord;
-    });
-    const completeSentence = capitalizedWords.join(" ");
-    setValue(completeSentence);
-    return completeSentence;
+  // Selected Stocks
+  const selectedStocks = selectedPortfolio?.stocks;
+  // Setting New Portfolio Name
+  function handlePortfolioNameChange(e: ChangeEvent<HTMLInputElement>) {
+    console.log(e.target.value);
+    setNewPortfolioName(e.target.value);
   }
+  const userId = selectedPortfolio.userId;
 
+  // MISC: CAPITALIZE STOCKDB NAMES
+  function capitalizeEachWord(sentence: string) {
+    if (!sentence || typeof sentence !== "string") {
+      throw new Error("Input must be a valid string");
+    }
+    return sentence
+      .split(" ")
+      .map((word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join(" ");
+  }
+  // const isDesktop = useMediaQuery("(min-width: 768px)");
   return (
     <Tabs
       onValueChange={(value) => {
@@ -125,23 +155,52 @@ export const StockList = ({
     >
       <TabsList>
         {collectionOfPortfolios.map((portfolio) => (
-          <TabsTrigger
-            key={portfolio.id}
-            value={portfolio.name}
-            // onClick={() => {
-            //   setportfolioId(portfolio.id);
-            //   handlePortfolioSelection(portfolio.id);
-            // }}
-          >
+          <TabsTrigger key={portfolio.id} value={portfolio.name}>
             {portfolio.name}
           </TabsTrigger>
         ))}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="ghost">
+              <Plus />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Add Watchlist</DialogTitle>
+              <DialogDescription>Create a new watchlist.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  defaultValue="NextGen AI Stocks"
+                  className="col-span-3"
+                  onChange={handlePortfolioNameChange}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                type="submit"
+                onClick={() => {
+                  AddPortfolio(newPortfolioName, userId);
+                }}
+              >
+                Add Watchlist
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </TabsList>
       <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
         <CardHeader className="flex flex-row items-start bg-muted/50">
           <div className="grid gap-0.5">
             <CardTitle className="group flex items-center gap-2 text-lg">
-              Stock List
+              {portfolioName}
             </CardTitle>
             <CardDescription>{new Date().toDateString()}</CardDescription>
           </div>
@@ -149,62 +208,68 @@ export const StockList = ({
           <div className="ml-auto flex items-center gap-1">
             <Dialog>
               <DialogTrigger asChild>
-                <Button size="sm" variant="outline" className="h-8 gap-1">
-                  <Plus className="h-3.5 w-3.5" />
-                  <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                    Add
-                  </span>
-                </Button>
+                <Button variant="outline">Add</Button>
               </DialogTrigger>
-              <DialogContent className="flex items-center">
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                      className="w-[200px] justify-between overflow-hidden"
-                    >
-                      {value ? value : "Select a company..."}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
-                    <Command>
-                      <CommandInput placeholder="Company name..." />
-                      <CommandEmpty>No stock found.</CommandEmpty>
-                      <CommandGroup className="h-[15rem] overflow-scroll">
-                        {stocksDB.map((stock) => (
-                          <CommandItem
-                            key={stock.id}
-                            value={stock.Name}
-                            onSelect={(currentValue) => {
-                              capitalizeEveryWord(currentValue);
-                              setOpen(false);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                value === stock.Name
-                                  ? "opacity-100"
-                                  : "opacity-0",
-                              )}
-                            />
-                            ({stock.Symbol}){":"} {stock.Name}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <Button
-                  variant="outline"
-                  className="w-1/2 text justify-between"
-                >
-                  <Plus className="h-3.5 w-3.5" />
-                  <span className="xl:whitespace-nowrap">Add</span>
-                </Button>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Edit profile</DialogTitle>
+                  <DialogDescription>
+                    Start typing to find the stock you want to add. <br />
+                    Click <strong>Add</strong> when you&apos;re done.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="block sm:flex gap-2">
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-3/4 overflow-hidden justify-between"
+                      >
+                        {value ? value : "Type to find your stock..."}
+                        <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[250px] p-0">
+                      <Command>
+                        <CommandInput placeholder="Search a stock..." />
+                        <CommandEmpty>No Stock found.</CommandEmpty>
+                        <CommandGroup>
+                          {stocksDB.map((stock) => (
+                            <CommandItem
+                              key={stock.Name}
+                              value={capitalizeEachWord(stock.Name)}
+                              onSelect={(currentValue) => {
+                                setValue(capitalizeEachWord(currentValue));
+                                setStockSymbol(stock.Symbol);
+                                setOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  value === stock.Name
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                              {capitalizeEachWord(stock.Name)}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <Button
+                    className="md:w-[10rem] w-[200px]"
+                    variant="outline"
+                    onClick={() =>
+                      AddStock(selectedPortfolio.id, value, stockSymbol)
+                    }
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add
+                  </Button>
+                </div>
               </DialogContent>
             </Dialog>
           </div>
@@ -216,12 +281,13 @@ export const StockList = ({
                 <TableHead>Name</TableHead>
                 <TableHead>Visualize</TableHead>
                 <TableHead>Summarize</TableHead>
+                <TableHead>Delete</TableHead>
               </TableRow>
             </TableHeader>
 
             <TableBody>
-              {stocks ? (
-                stocks.map((stock) => (
+              {selectedStocks ? (
+                selectedStocks.map((stock) => (
                   <TableRow className="bg-accent" key={stock.id}>
                     <TableCell
                       className="cursor-pointer"
@@ -245,20 +311,56 @@ export const StockList = ({
                             Visualize
                           </TooltipContent>
                         </TableCell>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TableCell>
-                              <TooltipTrigger asChild>
-                                <Button variant="outline">
-                                  <PencilLine size={20} />
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent side="right">
-                                Summarize
-                              </TooltipContent>
-                            </TableCell>
-                          </Tooltip>
-                        </TooltipProvider>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TableCell>
+                          <TooltipTrigger asChild>
+                            <Button variant="outline">
+                              <PencilLine size={20} />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent side="right">
+                            Summarize
+                          </TooltipContent>
+                        </TableCell>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TableCell>
+                          <TooltipTrigger asChild>
+                            <div>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    size="icon"
+                                    variant="outline"
+                                    className="h-8 w-8"
+                                  >
+                                    <MoreVertical className="h-3.5 w-3.5" />
+                                    <span className="sr-only">More</span>
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      DeleteStock(
+                                        selectedPortfolio.id,
+                                        value,
+                                        stockSymbol,
+                                      )
+                                    }
+                                  >
+                                    Delete
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent side="right">Options</TooltipContent>
+                        </TableCell>
                       </Tooltip>
                     </TooltipProvider>
                   </TableRow>
@@ -279,6 +381,11 @@ export const StockList = ({
                   <TableCell>
                     <Button variant="outline" disabled>
                       <PencilLine size={20} />
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="outline">
+                      <X size={20} />
                     </Button>
                   </TableCell>
                 </TableRow>
