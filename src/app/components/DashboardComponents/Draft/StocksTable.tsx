@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ComboboxDemo } from "./Combobox";
-import { PortfolioWithStocks } from "@/app/Dashboard/page";
+import { PortfolioWithStocks } from "@/app/Dashboard/Insights/page";
 
 import { StockDB } from "@prisma/client";
 export type Portfolio = {
