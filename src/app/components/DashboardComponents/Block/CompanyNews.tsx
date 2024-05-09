@@ -21,7 +21,6 @@ import { Separator } from "@/components/ui/separator";
 import { CompanyNewsProps } from "./DashboardPages/Overview";
 import { useSearchParams } from "next/navigation";
 import { PortfolioWithStocks } from "@/app/Dashboard/Insights/page";
-import { startTransition } from "react";
 const CompanyNewsComponent = ({
   companyNews,
   collectionOfPortfolios,
@@ -122,22 +121,6 @@ const CompanyNewsComponent = ({
                   <Button disabled>
                     <Eye />
                   </Button>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-            <TableBody>
-              <TableRow>
-                <TableCell id="article">
-                  <div className="mb-2">
-                    <Skeleton className="h-6 w-1/2 my-1" />
-                    <Skeleton className="h-4 w-[8rem] my-1" />
-                  </div>
-                  <Skeleton className="h-4 w-full my-1" />
-                  <Skeleton className="h-4 w-full my-1" />
-                  <Separator />
-                </TableCell>
-                <TableCell className="text-right">
-                  {new Date().toDateString()}
                 </TableCell>
               </TableRow>
             </TableBody>
