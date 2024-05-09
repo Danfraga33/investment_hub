@@ -1,3 +1,4 @@
+"use server";
 import {
   DashboardData,
   GetEPSSuprise,
@@ -30,9 +31,10 @@ const Page = async ({
   const selectedPortfolio = collectionOfPortfolios?.find(
     (portfolio) => portfolio.id === searchParams.p,
   );
-  const selectedStock = selectedPortfolio?.stocks.find(
-    (stock) => stock.id === searchParams.s,
-  )?.symbol;
+
+  const selectedStock =
+    selectedPortfolio?.stocks.find((stock) => stock.id === searchParams.s)
+      ?.symbol ?? collectionOfPortfolios[0].stocks[0].name;
 
   const stockRes = await StockData();
   const price = await GetStockPrice(selectedStock);
