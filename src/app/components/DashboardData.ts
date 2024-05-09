@@ -18,16 +18,38 @@ export async function DashboardData() {
   }
 }
 
-export async function Simple(
+export async function AddStock(
   portfolioId: string,
-  symbol: string,
   name: string,
+  symbol: string,
 ) {
   await prisma.stock.create({
     data: {
       name,
       symbol,
       portfolioId,
+    },
+  });
+}
+export async function DeleteStock(
+  portfolioId: string,
+  name: string,
+  symbol: string,
+) {
+  await prisma.stock.delete({
+    where: {
+      name,
+      symbol,
+      portfolioId,
+    },
+  });
+}
+export async function AddPortfolio(name: string, userId: string) {
+  console.log(name, userId);
+  await prisma.portfolio.create({
+    data: {
+      name,
+      userId,
     },
   });
 }
