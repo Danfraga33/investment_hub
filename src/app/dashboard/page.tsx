@@ -49,7 +49,6 @@ const Overview = async ({
   //     </div>
   //   );
   // }
-
   const companyNews = await CompanyNews(
     selectedStock ?? collectionOfPortfolios[0].stocks[0].symbol,
   );
@@ -66,7 +65,6 @@ const Overview = async ({
 
   const stockRes = await StockData();
   const stocksDB = await stockRes.json();
-  console.log(stocksDB);
 
   return (
     <OverviewPage
