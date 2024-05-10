@@ -30,6 +30,7 @@ const OverviewPage = ({
   epsSuprise,
   percentageChange,
   currentPrice,
+  newsData,
 }: {
   epsSuprise: epsSupriseProps;
   percentageChange: number;
@@ -54,23 +55,29 @@ const OverviewPage = ({
 
           <Breadcrumbs />
         </header>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-          <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
+        <main className="grid flex-1 items-start gap-2 p-4 sm:px-6 sm:py-0 md:gap-2 lg:grid-cols-4 xl:grid-cols-4 w-full">
+          <div className="grid auto-rows-max items-start gap-4 md:gap-2 lg:col-span-3 h-screen">
             <Cards
+              newsData={newsData}
               epsSuprise={epsSuprise}
               percentageChange={percentageChange}
               currentPrice={currentPrice}
               collectionOfPortfolios={collectionOfPortfolios}
             />
             <CompanyNewsComponent
+              newsData={newsData}
               collectionOfPortfolios={collectionOfPortfolios}
               companyNews={companyNews}
             />
           </div>
-          <StockList
-            collectionOfPortfolios={collectionOfPortfolios}
-            stocksDB={stocksDB}
-          />
+          <div>
+            <StockList
+              percentageChange={percentageChange}
+              currentPrice={currentPrice}
+              collectionOfPortfolios={collectionOfPortfolios}
+              stocksDB={stocksDB}
+            />
+          </div>
         </main>
       </div>
     </div>
