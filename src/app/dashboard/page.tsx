@@ -34,27 +34,20 @@ const Overview = async ({
   const selectedPortfolio = collectionOfPortfolios?.find(
     (portfolio) => portfolio.id === searchParams.p,
   );
+
   const selectedStock = selectedPortfolio?.stocks.find(
     (stock) => stock.id === searchParams.s,
   )?.symbol;
 
-  // if (!selectedPortfolio) {
-  //   return (
-  //     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-  //       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-  //         <InitialPortfolioOption
-  //           collectionOfPortfolios={collectionOfPortfolios}
-  //         />
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  const lastPrice = await GetStockPrice(selectedStock ?? "");
+
   const companyNews = await CompanyNews(
     selectedStock ?? collectionOfPortfolios[0].stocks[0].symbol,
   );
   const epsRes: epsSupriseProps[] = await GetEPSSuprise(
     selectedStock ?? collectionOfPortfolios[0].stocks[0].symbol,
   );
+
   const price = await GetStockPrice(
     selectedStock ?? collectionOfPortfolios[0].stocks[0].symbol,
   );
