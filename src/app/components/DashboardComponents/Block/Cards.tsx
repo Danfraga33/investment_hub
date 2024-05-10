@@ -12,12 +12,15 @@ import {
   PortfolioWithStocks,
   epsSupriseProps,
 } from "@/app/Dashboard/Insights/page";
+import { NewsPageProps } from "@/app/Dashboard/page";
 export const Cards = ({
   collectionOfPortfolios = [],
   currentPrice,
   percentageChange,
   epsSuprise,
+  newsData,
 }: {
+  newsData: NewsPageProps;
   epsSuprise: epsSupriseProps;
   percentageChange: number;
   currentPrice: number;
@@ -36,7 +39,7 @@ export const Cards = ({
     collectionOfPortfolios[0].stocks[0];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
       <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
         {selectedStock ? (
           <CardHeader className="pb-3">
