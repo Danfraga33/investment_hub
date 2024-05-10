@@ -26,18 +26,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import { StockDB } from "@prisma/client";
 import {
   AreaChart,
   Check,
   ChevronDown,
+  Hexagon,
   MoreVertical,
   PencilLine,
   Plus,
@@ -69,11 +64,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
+import Link from "next/link";
 
 export const StockList = ({
   collectionOfPortfolios,
   stocksDB,
+  percentageChange,
+  currentPrice,
 }: {
+  percentageChange: number;
+  currentPrice: number;
   stocksDB: StockDB[];
   collectionOfPortfolios: PortfolioWithStocks[];
 }) => {
@@ -88,6 +89,7 @@ export const StockList = ({
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  console.log(pathname);
 
   // Portfolio Selection
   function handlePortfolioSelection(portfolioName: string) {
@@ -144,6 +146,7 @@ export const StockList = ({
       })
       .join(" ");
   }
+  console.log(selectedStocks);
   // const isDesktop = useMediaQuery("(min-width: 768px)");
   return (
     <Tabs
@@ -180,6 +183,7 @@ export const StockList = ({
                   defaultValue="NextGen AI Stocks"
                   className="col-span-3"
                   onChange={handlePortfolioNameChange}
+                  required
                 />
               </div>
             </div>
@@ -236,7 +240,7 @@ export const StockList = ({
                         <CommandGroup>
                           {stocksDB.map((stock) => (
                             <CommandItem
-                              key={stock.Name}
+                              key={stock.id}
                               value={capitalizeEachWord(stock.Name)}
                               onSelect={(currentValue) => {
                                 setValue(capitalizeEachWord(currentValue));
@@ -260,7 +264,7 @@ export const StockList = ({
                     </PopoverContent>
                   </Popover>
                   <Button
-                    className="md:w-[10rem] w-[200px]"
+                    className="md:w-[10rem] w-[200px] flex items-center"
                     variant="outline"
                     onClick={() =>
                       AddStock(selectedPortfolio.id, value, stockSymbol)
@@ -278,10 +282,11 @@ export const StockList = ({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Visualize</TableHead>
-                <TableHead>Summarize</TableHead>
-                <TableHead>Delete</TableHead>
+                <TableHead>Symbol</TableHead>
+
+                <TableHead>Last</TableHead>
+                <TableHead>Chg%</TableHead>
+                <TableHead>Edit</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -290,79 +295,81 @@ export const StockList = ({
                 selectedStocks.map((stock) => (
                   <TableRow className="bg-accent" key={stock.id}>
                     <TableCell
-                      className="cursor-pointer"
+                      className="cursor-pointer "
                       onClick={() => handleStockSelection(stock.id)}
                     >
-                      <div className="font-medium">{stock.symbol}</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        {stock.name}
+                      <div className="flex items-center  ">
+                        <Image
+                          src={stock.logo ? stock.logo : "/default.jpg"}
+                          alt={`${stock.name} Logo`}
+                          width={22}
+                          height={22}
+                          className="rounded-2xl mr-1.5"
+                          quality={100}
+                          layout="fixed"
+                        />
+                        <div className="font-medium">{stock.symbol}</div>
                       </div>
+                      {/* <div className="hidden text-sm text-muted-foreground md:inline">
+                        {stock.name}
+                      </div> */}
                     </TableCell>
 
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TableCell>
-                          <TooltipTrigger asChild>
-                            <Button variant="destructive">
-                              <AreaChart size={20} />
+                    <TableCell>
+                      <span className="font-semibold">
+                        {stock.last ?? 1.23}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <span
+                        className={cn("font-semibold", {
+                          "text-green-500": stock?.percentageChange > 0,
+                          "text-red-400": stock?.percentageChange < 0,
+                        })}
+                      >
+                        {Number(stock.percentageChange).toFixed(2) ?? "2.33"}
+                      </span>
+                    </TableCell>
+
+                    <TableCell>
+                      <div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              className="h-8 w-8"
+                            >
+                              <MoreVertical className="h-3.5 w-3.5" />
+                              <span className="sr-only">More</span>
                             </Button>
-                          </TooltipTrigger>
-                          <TooltipContent side="right">
-                            Visualize
-                          </TooltipContent>
-                        </TableCell>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TableCell>
-                          <TooltipTrigger asChild>
-                            <Button variant="outline">
-                              <PencilLine size={20} />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent side="right">
-                            Summarize
-                          </TooltipContent>
-                        </TableCell>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TableCell>
-                          <TooltipTrigger asChild>
-                            <div>
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button
-                                    size="icon"
-                                    variant="outline"
-                                    className="h-8 w-8"
-                                  >
-                                    <MoreVertical className="h-3.5 w-3.5" />
-                                    <span className="sr-only">More</span>
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuItem
-                                    onClick={() =>
-                                      DeleteStock(
-                                        selectedPortfolio.id,
-                                        value,
-                                        stockSymbol,
-                                      )
-                                    }
-                                  >
-                                    Delete
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent side="right">Options</TooltipContent>
-                        </TableCell>
-                      </Tooltip>
-                    </TooltipProvider>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={() => console.log("Summarize")}
+                            >
+                              Summarize
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => console.log("visualize")}
+                            >
+                              <Link href="/Dashboard/Analytics">Visualize</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                DeleteStock(
+                                  selectedPortfolio.id,
+                                  value,
+                                  stockSymbol,
+                                )
+                              }
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
