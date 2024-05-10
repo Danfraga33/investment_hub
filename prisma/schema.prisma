@@ -44,8 +44,11 @@ model Portfolio {
 
 model Stock {
   id          String     @id @default(cuid())
+  logo String?
   name        String
   symbol      String     @unique
+  last Decimal?
+  percentageChange Decimal?
   portfolioId String
   portfolio   Portfolio  @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   createdAt   DateTime   @default(now())
