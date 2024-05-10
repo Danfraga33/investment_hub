@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
+
 export async function DashboardData() {
   try {
     const data = await db.portfolio.findMany({
@@ -23,11 +24,25 @@ export async function AddStock(
   name: string,
   symbol: string,
 ) {
+  const res = await fetch(
+    `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`,
+  );
+  const data = await res.json();
+  /////////
+  const profile = await fetch(
+    `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`,
+  );
+  const profileData = await profile.json();
+  console.log(profileData);
+
   await prisma.stock.create({
     data: {
       name,
       symbol,
       portfolioId,
+      last: data.c,
+      percentageChange: data.dp,
+      logo: profileData.logo,
     },
   });
 }
