@@ -1,8 +1,10 @@
 "use server";
-import { db } from "@/lib/db";
-import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
+import { db } from "@/lib/db";
+
+import { PrismaClient } from "@prisma/client";
+
+import { NextResponse } from "next/server";
 
 export async function DashboardData() {
   try {
@@ -33,7 +35,6 @@ export async function AddStock(
     `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`,
   );
   const profileData = await profile.json();
-  console.log(profileData);
 
   await prisma.stock.create({
     data: {
@@ -46,6 +47,7 @@ export async function AddStock(
     },
   });
 }
+
 export async function DeleteStock(
   portfolioId: string,
   name: string,
@@ -60,7 +62,6 @@ export async function DeleteStock(
   });
 }
 export async function AddPortfolio(name: string, userId: string) {
-  console.log(name, userId);
   await prisma.portfolio.create({
     data: {
       name,
@@ -81,6 +82,55 @@ export async function StockData() {
   }
 }
 
+export async function getFinancialsPastFiveYears(symbol: string) {
+  try {
+    const today = new Date();
+    const to = today.toISOString().split("T")[0]; // Current date
+    const from = new Date(
+      today.getFullYear() - 5,
+      today.getMonth(),
+      today.getDate(),
+    )
+      .toISOString()
+      .split("T")[0]; // Date 5 years ago
+
+    const url = `https://finnhub.io/api/v1/stock/financials-reported?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}&from=${from}&to=${to}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data && data.data) {
+      type NetSalesData = {
+        year: number;
+        netSalesValue: number;
+      };
+      const netSales: NetSalesData[] = [];
+      data.data.forEach((item) => {
+        console.log(item);
+
+        // Find the line item corresponding to net sales
+        const incomeStatement = item.report.ic;
+        const netSalesItem = incomeStatement[0];
+        if (netSalesItem) {
+          const netSalesValue = netSalesItem.value;
+          const year = item.year;
+
+          netSales.push({
+            year,
+            netSalesValue,
+          });
+        }
+      });
+    } else {
+      throw new Error("No data found");
+    }
+  } catch (error: unknown) {
+    error instanceof Error
+      ? console.error("Error fetching financial data:", error.message)
+      : console.error("Unknown error occurred while fetching financial data");
+  }
+  return null;
+}
+getFinancialsPastFiveYears("BFH");
 export async function NewsData() {
   try {
     const res = await fetch(
@@ -126,3 +176,25 @@ export async function GetEPSSuprise(stockSymbol: string) {
     throw new Error(`Failed to fetch`);
   }
 }
+
+// export async function GetYieldData() {
+//   const res = await fetch(
+//     "https://home.treasury.gov/sites/default/files/interest-rates/yield.xml",
+//   );
+//   const xmlData = await res.text();
+//   const parser = new xml2js.Parser({ explicitArray: false });
+//   const jsonData = await parser.parseStringPromise(xmlData);
+
+//   const may10Data =
+//     jsonData.QR_BC_CM.LIST_G_WEEK_OF_MONTH.G_WEEK_OF_MONTH.filter((week) =>
+//       week.LIST_G_NEW_DATE.G_NEW_DATE.find(
+//         (date) => date.NEW_DATE === "05-10-2024",
+//       ),
+//     );
+
+//   const recentData = may10Data[0].LIST_G_NEW_DATE.G_NEW_DATE.filter(
+//     (data) => data.BID_CURVE_DATE == "10-MAY-24",
+//   )[0].LIST_G_BC_CAT;
+
+//   console.log(recentData);
+// }
