@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     icon: "/favicon.png",
   },
 };
-
+ 
 export default async function RootLayout({
   children,
 }: Readonly<{
