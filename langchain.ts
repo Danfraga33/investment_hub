@@ -25,42 +25,34 @@ export async function getPartOne() {
   const part1Split = await splitter.createDocuments([part1Text]);
 
   const secondSplitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 3000,
-    chunkOverlap: 250,
+    chunkSize: 2000,
+    chunkOverlap: 200,
   });
-  const riskFactors = part1Split[1].pageContent.replace("\n", "").trim();
+  const riskFactorsSection = part1Split[1].pageContent.replace("\n", "").trim();
 
-  const largeContentSplit = await secondSplitter.createDocuments([riskFactors]);
+  const riskFactorsParagraph = await secondSplitter.createDocuments([
+    riskFactorsSection,
+  ]);
 
-  const responseArr = [];
-  for (const chunk of largeContentSplit) {
-    const textData = chunk.pageContent.trim();
-    const data = await GPT(textData);
-    responseArr.push(data);
-  }
+  const dataRF = await GPT([riskFactorsParagraph[1]]);
 
-  const responseData = responseArr.reduce(
-    (acc, curr) => {
-      acc.answer += curr.answer;
-      return acc;
-    },
-    { answer: "" },
-  );
+  // const responseArr = [];
+  // for (const chunk of riskFactorsParagraph) {
+  //   const textData = chunk.pageContent.trim();
+  //   console.log(typeof chunk.pageContent);
+  //   const data = await GPT(textData);
 
-  console.log(responseData);
+  //   responseArr.push(data);
+  // }
 
-  // const businessOverview = part1Split[0].pageContent.trim();
-  // const properties = part1Split[3].pageContent.replace("\n", "").trim();
-  // const legalProceedings = part1Split[4].pageContent.trim();
-  // const mineSafetyDisclosure = part1Split[5].pageContent.trim();
-
-  // return businessOverview;
-  // return({
-  //   businessOverview,
-  //   riskFactors,
-  //   properties,
-  //   legalProceedings,
-  //   mineSafetyDisclosure,
-  // });
+  console.log(dataRF);
+  console.log(riskFactorsParagraph[1].pageContent);
+  // const responseData = responseArr.reduce(
+  //   (acc, curr) => {
+  //     acc.answer += curr.answer;
+  //     return acc;
+  //   },
+  //   { answer: "" },
+  // );
 }
 getPartOne();
