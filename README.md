@@ -1,5 +1,17 @@
-<!--
-1. Get Types for portfolio data
-2. Use Portfolio Data within the Application
-3. Incorporate sec API
-1.  -->
+- [] Landing Page
+- [] Login in Function - Data is stored in DB upon successful login
+- [] Create custom Login page
+- [x] Protect Dashboard routes
+- [x] Pricing Page
+- [x] Light/Dark Theme
+- [x] Create navbar that is only accessible for authorized users and only visbile on the dashboard
+- [x] Show Portfolio in Stock List
+- [] Add Stock to selected Portfolio
+- [] Create a new Portfolio
+- [x] Delete Stock
+- [] Delete Portfolio
+- [] Create Overview Page - With current company and market news (same layout as Shadcn mail (Home page) example)
+- [] Create Summary Page - Summarizing key parts of SEC Filing
+- DEPLOY
+- [] Create Annual Report Assistant - Create financial assistant
+- [] Create visualizing page
