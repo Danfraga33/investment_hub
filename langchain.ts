@@ -3,7 +3,7 @@ import {
   CharacterTextSplitter,
   RecursiveCharacterTextSplitter,
 } from "langchain/text_splitter";
-import { GPT } from "./Openai";
+import { ChatSum, GPT } from "./Openai";
 export async function getPartOne() {
   const fetchURL = await fetch(
     "https://www.sec.gov/Archives/edgar/data/1318605/000156459021004599/tsla-10k_20201231.htm",
@@ -28,31 +28,24 @@ export async function getPartOne() {
     chunkSize: 2000,
     chunkOverlap: 200,
   });
-  const riskFactorsSection = part1Split[1].pageContent.replace("\n", "").trim();
+  const riskFactorsSection = part1Split[1].pageContent.trim();
 
   const riskFactorsParagraph = await secondSplitter.createDocuments([
     riskFactorsSection,
   ]);
 
-  const dataRF = await GPT([riskFactorsParagraph[1]]);
+  // const dataRF = await GPT([riskFactorsParagraph[3]]);
+  const responses = await Promise.all(
+    riskFactorsParagraph.map((element) => {
+      return GPT([element]);
+    }),
+  );
 
-  // const responseArr = [];
-  // for (const chunk of riskFactorsParagraph) {
-  //   const textData = chunk.pageContent.trim();
-  //   console.log(typeof chunk.pageContent);
-  //   const data = await GPT(textData);
+  const output = responses.reduce((acc, curr) => {
+    return acc + curr.res.text;
+  }, "");
 
-  //   responseArr.push(data);
-  // }
-
-  console.log(dataRF);
-  console.log(riskFactorsParagraph[1].pageContent);
-  // const responseData = responseArr.reduce(
-  //   (acc, curr) => {
-  //     acc.answer += curr.answer;
-  //     return acc;
-  //   },
-  //   { answer: "" },
-  // );
+  const finalResponse = await ChatSum(output);
+  console.log(finalResponse);
 }
 getPartOne();
