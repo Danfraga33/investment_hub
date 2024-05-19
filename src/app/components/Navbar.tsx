@@ -4,16 +4,18 @@ import MaxWidthWrapper from "./MaxWidthWrapper";
 import { buttonVariants } from "@/components/ui/button";
 import { signIn, useSession } from "next-auth/react";
 import { UserNav } from "./DashboardComponents/UserNav";
+import { ModeToggle } from "../ModeToggle";
 
 const Navbar = () => {
   const { data: session } = useSession();
   return (
-    <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
+    <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all dark:bg-primary-foreground">
       <MaxWidthWrapper>
         <div className="flex h-14 items-center justify-between border-b border-zinc-200 ">
           <Link href="/" className="flex z-40 font-semibold">
             <span>Investment Hub</span>
           </Link>
+          <ModeToggle />
 
           {/* <StrategySwitch /> */}
           {/* To do: add mobile navbar */}
