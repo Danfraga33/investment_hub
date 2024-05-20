@@ -1,6 +1,6 @@
 import { ChatOpenAI, OpenAI } from "@langchain/openai";
 import { loadSummarizationChain } from "langchain/chains";
-import { PromptTemplate } from "@langchain/core/prompts";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
 
 export async function GPT(docs: any) {
   const model = new OpenAI({
@@ -21,13 +21,18 @@ export async function ChatSum(text: string) {
     temperature: 0.4,
     openAIApiKey: "sk-proj-JSbitKpfqOYwPWtlbYuDT3BlbkFJXswtKWvDhBPP5enwlHBk",
   });
+  const prompt = ChatPromptTemplate.fromMessages([
+    [
+      "human",
+      "Summarize {topic} as someone providing insights to the following data, using an opportunistic and positive tone.Extract 5 key headings and give 75-125 word summary per heading. Return your response in this markdown.",
+    ],
+  ]);
+  const promptValue = await prompt.invoke({ topic: text });
+  const promptAsMessages = promptValue.toChatMessages();
+  const response = await model.invoke(promptAsMessages);
+  return response;
+  // const chain = promptTemplate.pipe(model);
 
-  const promptTemplate = PromptTemplate.fromTemplate(
-    "Summarize the following data, using an opportunistic and positive tone. Imagine you are an someone providing insights. {topic}",
-  );
-
-  const chain = promptTemplate.pipe(model);
-
-  const result = await chain.invoke({ topic: text });
-  console.log(result.lc_kwargs.content);
+  // const result = await chain.invoke({ topic: text });
+  // return result.lc_kwargs.content;
 }

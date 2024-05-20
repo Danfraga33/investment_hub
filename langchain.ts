@@ -4,6 +4,7 @@ import {
   RecursiveCharacterTextSplitter,
 } from "langchain/text_splitter";
 import { ChatSum, GPT } from "./Openai";
+
 export async function getPartOne() {
   const fetchURL = await fetch(
     "https://www.sec.gov/Archives/edgar/data/1318605/000156459021004599/tsla-10k_20201231.htm",
@@ -46,6 +47,6 @@ export async function getPartOne() {
   }, "");
 
   const finalResponse = await ChatSum(output);
-  console.log(finalResponse);
+  return finalResponse.lc_kwargs.content;
 }
 getPartOne();
