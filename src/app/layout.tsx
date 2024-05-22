@@ -3,11 +3,11 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "../lib/utils";
 import Navbar from "./components/Navbar";
-const inter = Inter({ subsets: ["latin"] });
 import SessionProvider from "./components/SessionProvider";
 import { auth } from "@/lib/auth";
 import React from "react";
-import { Sidebar } from "./components/DashboardComponents/Block/Sidebar";
+import { ThemeProvider } from "./ThemeProvider";
+const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Investment Hub",
   description:
@@ -23,19 +23,25 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <SessionProvider session={session}>
         <body
           className={cn(
-            "min-h-screen font-sans bg-gray-50 antialised grainy",
+            "min-h-screen font-sans bg-gray-50 dark:bg-stone-800 antialised grainy",
             inter.className,
           )}
         >
-          <Sidebar />
-
-          <Navbar />
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
+            {children}
+          </ThemeProvider>
         </body>
       </SessionProvider>
     </html>
