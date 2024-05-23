@@ -105,8 +105,6 @@ export async function getFinancialsPastFiveYears(symbol: string) {
       };
       const netSales: NetSalesData[] = [];
       data.data.forEach((item) => {
-        console.log(item);
-
         // Find the line item corresponding to net sales
         const incomeStatement = item.report.ic;
         const netSalesItem = incomeStatement[0];
