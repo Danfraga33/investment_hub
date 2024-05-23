@@ -1,4 +1,4 @@
-import PDFChatPage from "@/app/components/DashboardComponents/Block/DashboardPages/PDFChat";
+import PDFChatPage from "@/app/components/DashboardComponents/DashboardPages/PDFChat";
 const PDFChat = () => {
   return <PDFChatPage />;
 };

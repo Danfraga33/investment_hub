@@ -5,8 +5,10 @@ import {
   GetStockPrice,
   StockData,
 } from "../../components/DashboardData";
-import Insights from "@/app/components/DashboardComponents/Block/DashboardPages/Insights";
+import Insights from "@/app/components/DashboardComponents/DashboardPages/Insights";
 import { Prisma } from "@prisma/client";
+import { GPT } from "../../../../Openai";
+import { getPartOne } from "../../../../langchain";
 export type PortfolioWithStocks = Prisma.PortfolioGetPayload<{
   include: { stocks: true };
 }>;
@@ -43,10 +45,6 @@ const Page = async ({
 
   const epsRes: epsSupriseProps[] = await GetEPSSuprise(selectedStock);
   const epsSuprise = epsRes[0];
-
-  // if (stockRes) {
-  //   //////////
-  // }
 
   const stocksDB = await stockRes.json();
   return (
