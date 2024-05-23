@@ -6,25 +6,23 @@ import {
   CreditCardIcon,
   Crown,
   LineChart,
-  MoveUpRight,
-  MoveVerticalIcon,
   PieChart,
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { DashboardData } from "../components/DashboardData";
 import { cn } from "@/lib/utils";
 
 const Holdings = async () => {
+  const Portfolio = await DashboardData();
+  const PortfolioData = await Portfolio.json();
+  const DPortfolio = PortfolioData.find(
+    (portfolio) => portfolio.name === "Defensive",
+  );
+
   return (
-    <div className="h-screen  flex flex-col">
+    <div className="h-screen flex flex-col">
       <MaxWidthWrapper>
         <section className="bg-white">
           <section className="rounded-xl p-6 shadow-md sm:gap-4 sm:py-4 sm:pl-14 px-4">
@@ -90,7 +88,7 @@ const Holdings = async () => {
             <section>
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-[#14142B]">
-                  Recent Transactions
+                  Portfolio
                 </h3>
                 <Link
                   className="text-sm text-[#6E7191] hover:text-[#14142B]"
@@ -100,35 +98,44 @@ const Holdings = async () => {
                 </Link>
               </div>
               <Table>
-                {/* <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Invoice</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Method</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-              </TableRow>
-            </TableHeader> */}
                 <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">
-                      <div className="flex items-center space-x-2">
-                        <CreditCardIcon className="text-[#6E7191] h-6 w-6" />
-                        <div>
-                          <p className="text-sm font-medium text-[#14142B]">
-                            AAPL
-                          </p>
-                          <p className="text-xs text-[#6E7191]">Apple Inc.</p>
+                  {DPortfolio.stocks.map((stock) => (
+                    <TableRow key={stock.id}>
+                      <TableCell className="font-medium">
+                        <div className="flex items-center space-x-2">
+                          <CreditCardIcon className="text-[#6E7191] h-6 w-6" />
+                          <div>
+                            <p className="text-sm font-medium text-[#14142B]">
+                              {stock.symbol}
+                            </p>
+                            <p className="text-xs text-[#6E7191]">
+                              {stock.name}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>Technology</TableCell>
-                    <TableCell className="text-right">+3.45%</TableCell>
+                      </TableCell>
+                      <TableCell>Technology</TableCell>
+                      <TableCell
+                        className={cn("font-semibold text-right", {
+                          "text-green-300": Number(stock.percentageChange) > 0,
+                          "text-red-300": Number(stock.percentageChange) < 0,
+                        })}
+                      >
+                        {Number(stock.percentageChange).toFixed(2) ?? 0}%
+                      </TableCell>
 
-                    <TableCell className="text-right">$4.41</TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="outline">Analyze</Button>
-                    </TableCell>
-                  </TableRow>
+                      <TableCell className="text-right font-bold">
+                        ${stock.last}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="outline" asChild>
+                          <Link href={`/Dashboard/${stock.symbol}`}>
+                            Analyze
+                          </Link>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </section>
