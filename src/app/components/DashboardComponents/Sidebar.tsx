@@ -10,9 +10,16 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { UserNav } from "./UserNav";
 import { cn } from "@/lib/utils";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export const Sidebar = () => {
   const [selected, setSelected] = useState("/Dashboard");
+  const params = usePathname();
+  console.log(params);
+  const paramsArr = params.split("/");
+  const ticker = paramsArr[paramsArr.length - 1];
+  console.log(ticker);
+
   return (
     <aside className="z-99 fixed inset-y-0 left-0 z-10 hidden w-14 mt-14 flex-col border-r bg-background sm:flex">
       <nav className="flex flex-col items-center gap-4 px-2 sm:py-5 ">
@@ -20,7 +27,7 @@ export const Sidebar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="/Dashboard/Overview"
+                href={`/Dashboard/${ticker}/Overview`}
                 className={cn(
                   "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
                   selected === "/Dashboard"
@@ -40,7 +47,7 @@ export const Sidebar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="/Dashboard/Insights"
+                href={`/Dashboard/${ticker}/Insights`}
                 className={cn(
                   "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
                   selected === "/Dashboard/Insights"
@@ -60,7 +67,7 @@ export const Sidebar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="/Dashboard/PDFChat"
+                href={`/Dashboard/${ticker}/PDFChat`}
                 className={cn(
                   "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
                   selected === "/Dashboard/PDFChat"
@@ -83,7 +90,7 @@ export const Sidebar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="/Dashboard/Analytics"
+                href={`/Dashboard/${ticker}/Analytics`}
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
                 onClick={() => setSelected("/Dashboard/Analytics")}
               >
