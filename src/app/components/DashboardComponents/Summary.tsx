@@ -6,17 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { PortfolioWithStocks } from "@/app/Dashboard/Insights/page";
-export const SummaryData = ({
-  // collectionOfPortfolios,
-  summaryData,
-}: {
-  collectionOfPortfolios: PortfolioWithStocks[];
-  summaryData: string;
-}) => {
-  if (summaryData) {
-    console.log(summaryData);
-  }
+export const SummaryData = () => {
   // const firstStock = collectionOfPortfolios[0].stocks[0].symbol;
   // const revenue = getFinancialsPastFiveYears(firstStock);
   return (
