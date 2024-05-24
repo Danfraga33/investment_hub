@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Sidebar } from "../components/DashboardComponents/Sidebar";
+import { Sidebar } from "../../components/DashboardComponents/Sidebar";
 import { auth } from "@/lib/auth";
 
 export default async function DashboardLayout({
@@ -8,5 +8,10 @@ export default async function DashboardLayout({
   children: ReactNode;
 }) {
   const session = await auth();
-  return <section>{children}</section>;
+  return (
+    <section>
+      {session && <Sidebar />}
+      {children}
+    </section>
+  );
 }
