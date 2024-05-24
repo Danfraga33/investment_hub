@@ -8,7 +8,7 @@ import {
   NewsData,
   StockData,
 } from "@/app/components/DashboardData";
-import { epsSupriseProps } from "../Insights/page";
+import { epsSupriseProps } from "../../Insights/page";
 
 export type NewsPageProps = {
   category: string;
