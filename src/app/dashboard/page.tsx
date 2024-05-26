@@ -27,7 +27,6 @@ const Holdings = async () => {
       stock.percentageChange > max.percentageChange ? stock : max,
     DPortfolio.stocks[0],
   );
-  console.log(topStock);
 
   return (
     <div className="h-screen flex flex-col">
@@ -35,20 +34,11 @@ const Holdings = async () => {
         <section className="bg-white rounded-xl p-6 shadow-md sm:gap-4 sm:py-4 sm:pl-14 px-4">
           <div className="flex justify-between items-center mb-6">
             <div className="flex flex-col gap-2 py-6">
-              <p className="text-xs">Total Balance</p>
+              <p className="text-xs">Portfolio Performance</p>
               <div className="flex gap-4 items-end">
                 <h2 className="text-4xl font-semibold text-[#14142B]">
-                  $36,254
+                  +7.22%
                 </h2>
-
-                <div className="flex items-end gap-2">
-                  <Badge className="bg-green-300 px-1 py-1">
-                    <p className="cursor-default text-xs p-0 m-0">+4.72%</p>
-                  </Badge>
-                  <p className="text-neutral-500/55 text-xs ">
-                    Since Yesterday
-                  </p>
-                </div>
               </div>
             </div>
             <div className="flex space-x-2">

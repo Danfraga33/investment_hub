@@ -35,6 +35,7 @@ export async function AddStock(
     `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`,
   );
   const profileData = await profile.json();
+  console.log("PROFLE", profileData);
 
   await prisma.stock.create({
     data: {
@@ -42,6 +43,7 @@ export async function AddStock(
       symbol,
       portfolioId,
       last: data.c,
+      // marketCapitalization: profileData.marketCapitalization,
       percentageChange: data.dp,
       logo: profileData.logo,
     },
