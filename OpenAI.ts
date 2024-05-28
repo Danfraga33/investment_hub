@@ -22,7 +22,7 @@
 //     openAIApiKey: "sk-proj-JSbitKpfqOYwPWtlbYuDT3BlbkFJXswtKWvDhBPP5enwlHBk",
 //   });
 //   const prompt = ChatPromptTemplate.fromMessages([
-//     [
+//     [ 
 //       "human",
 //       "Summarize {topic} as someone providing insights to the following data, using an opportunistic and positive tone.Extract 5 key headings and give 75-125 word summary per heading. Return your response in this markdown.",
 //     ],
