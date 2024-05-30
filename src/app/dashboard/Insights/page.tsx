@@ -1,6 +1,6 @@
 "use server";
 import {
-  PortfolioData,
+  getPortfolios,
   GetEPSSuprise,
   GetStockPrice,
   StockData,
@@ -26,15 +26,19 @@ const Page = async ({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  const res = await PortfolioData();
-  const collectionOfPortfolios: PortfolioWithStocks[] = await res.json();
-  const selectedPortfolio = collectionOfPortfolios?.find(
+  const collectionOfPortfolios = await getPortfolios();
+
+  if (collectionOfPortfolios.length === 0) {
+    return <p>No portofolio selected</p>;
+  }
+  const selectedPortfolio = collectionOfPortfolios.find(
     (portfolio) => portfolio.id === searchParams.p,
   );
 
   const selectedStock =
-    selectedPortfolio?.stocks.find((stock) => stock.stockId === searchParams.s)
-      ?.stockId ?? collectionOfPortfolios[0].stocks[0].symbol;
+    selectedPortfolio?.stocks.find(
+      (stocks) => stocks.stock.id === searchParams.s,
+    )?.stock.id ?? collectionOfPortfolios[0].stocks[0].stock.symbol;
 
   const stockRes = await StockData();
   const price = await GetStockPrice(selectedStock);

@@ -3,13 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { Breadcrumbs } from "@/app/components/DashboardComponents/Breadcrumbs";
 import { PanelLeft } from "lucide-react";
-import { PortfolioWithStocks } from "./Insights";
-import { NewsPageProps } from "@/app/Dashboard/page";
-import { StockList } from "../StockList";
+// import { PortfolioWithStocks } from "./Insights";
+// import { NewsPageProps } from "@/app/Dashboard/page";
+// import { StockList } from "../StockList";
 import { epsSupriseProps } from "@/app/Dashboard/Insights/page";
-import { StockDB } from "@prisma/client";
+// import { StockDB } from "@prisma/client";
 import { Cards } from "../Cards";
 import CompanyNewsComponent from "../CompanyNews";
+import { Portfolios } from "../../DashboardData";
 
 export type CompanyNewsProps = {
   category: string;
@@ -26,7 +27,6 @@ export type CompanyNewsProps = {
 const OverviewPage = ({
   collectionOfPortfolios,
   companyNews,
-  stocksDB,
   epsSuprise,
   percentageChange,
   currentPrice,
@@ -35,8 +35,7 @@ const OverviewPage = ({
   epsSuprise: epsSupriseProps;
   percentageChange: number;
   currentPrice: number;
-  collectionOfPortfolios: PortfolioWithStocks[];
-  stocksDB: StockDB[];
+  collectionOfPortfolios: Portfolios;
   companyNews: CompanyNewsProps[];
   newsData: NewsPageProps;
 }) => {

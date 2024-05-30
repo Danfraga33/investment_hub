@@ -5,7 +5,7 @@ import {
   GetStockPrice,
   NewsData,
   StockData,
-  PortfolioData,
+  getPortfolios,
 } from "@/app/components/DashboardData";
 
 export type NewsPageProps = {
@@ -25,25 +25,27 @@ const Overview = async ({
 }: {
   params: { portfolioId: string; symbol: string };
 }) => {
-  const res = await PortfolioData();
-  const collectionOfPortfolios = await res.json();
+  const collectionOfPortfolios = await getPortfolios();
   const selectedPortfolio = collectionOfPortfolios?.find(
     (portfolio) => portfolio.id === params.portfolioId,
   );
 
   const selectedStock = selectedPortfolio?.stocks.find(
-    (stock) => stock.stockId === params.symbol,
+    (stocks) => stocks.stock.symbol === params.symbol,
   );
 
   const companyNews = await CompanyNews(
-    selectedStock ?? collectionOfPortfolios[0].stocks[0].symbol,
+    selectedStock?.stock.symbol ??
+      collectionOfPortfolios[0].stocks[0].stock.symbol,
   );
   const epsRes: any = await GetEPSSuprise(
-    selectedStock ?? collectionOfPortfolios[0].stocks[0].symbol,
+    selectedStock?.stock.symbol ??
+      collectionOfPortfolios[0].stocks[0].stock.symbol,
   );
 
   const price = await GetStockPrice(
-    selectedStock ?? collectionOfPortfolios[0].stocks[0].symbol,
+    selectedStock?.stock.symbol ??
+      collectionOfPortfolios[0].stocks[0].stock.symbol,
   );
 
   const newsData: NewsPageProps = await NewsData();

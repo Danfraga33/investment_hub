@@ -8,13 +8,7 @@ import { StockList } from "../StockList";
 import { Breadcrumbs } from "../Breadcrumbs";
 import { epsSupriseProps } from "@/app/Dashboard/Insights/page";
 
-export type DashboardProps = {
-  collectionOfPortfolios: PortfolioWithStocks[];
-};
-
-export type PortfolioWithStocks = Prisma.PortfolioGetPayload<{
-  include: { stocks: true };
-}>;
+import type { Portfolios } from "../../DashboardData";
 
 const InsightsPage = ({
   collectionOfPortfolios,
@@ -23,7 +17,7 @@ const InsightsPage = ({
   epsSuprise: epsSupriseProps;
   percentageChange: number;
   currentPrice: number;
-  collectionOfPortfolios: PortfolioWithStocks[];
+  collectionOfPortfolios: Portfolios;
   stocksDB: StockDB[];
 }) => {
   return (

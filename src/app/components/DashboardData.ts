@@ -6,35 +6,37 @@ import { PrismaClient } from "@prisma/client";
 
 import { NextResponse } from "next/server";
 
-export async function PortfolioData() {
-  try {
-    const data = await db.portfolio.findMany({
-      select: {
-        name: true,
-        stocks: {
-          select: {
-            stock: {
-              select: {
-                industry: true,
-                symbol: true,
-                logo: true,
-                exchange: true,
-                last: true,
-                marketCapitalization: true,
-                name: true,
-              },
+/**
+ * Get all the portfolios
+ * @returns {Portfolios} Collections of portfolios
+ */
+export async function getPortfolios() {
+  // TODO: Protect by checking user
+  return await db.portfolio.findMany({
+    select: {
+      name: true,
+      id: true,
+      stocks: {
+        select: {
+          stock: {
+            select: {
+              id: true,
+              industry: true,
+              symbol: true,
+              logo: true,
+              exchange: true,
+              last: true,
+              marketCapitalization: true,
+              name: true,
             },
           },
         },
       },
-    });
-    // Find selected PORTFOLIO here
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Failed to fetch data" });
-  }
+    },
+  });
 }
+
+export type Portfolios = Awaited<ReturnType<typeof getPortfolios>>;
 
 export async function AddStock(
   portfolioId: string,
