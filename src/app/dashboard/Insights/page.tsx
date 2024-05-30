@@ -1,14 +1,12 @@
 "use server";
 import {
-  DashboardData,
+  PortfolioData,
   GetEPSSuprise,
   GetStockPrice,
   StockData,
 } from "../../components/DashboardData";
 import Insights from "@/app/components/DashboardComponents/DashboardPages/Insights";
 import { Prisma } from "@prisma/client";
-import { GPT } from "../../../../Openai";
-import { getPartOne } from "../../../../langchain";
 export type PortfolioWithStocks = Prisma.PortfolioGetPayload<{
   include: { stocks: true };
 }>;
@@ -28,15 +26,15 @@ const Page = async ({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  const res = await DashboardData();
+  const res = await PortfolioData();
   const collectionOfPortfolios: PortfolioWithStocks[] = await res.json();
   const selectedPortfolio = collectionOfPortfolios?.find(
     (portfolio) => portfolio.id === searchParams.p,
   );
 
   const selectedStock =
-    selectedPortfolio?.stocks.find((stock) => stock.id === searchParams.s)
-      ?.symbol ?? collectionOfPortfolios[0].stocks[0].name;
+    selectedPortfolio?.stocks.find((stock) => stock.stockId === searchParams.s)
+      ?.stockId ?? collectionOfPortfolios[0].stocks[0].symbol;
 
   const stockRes = await StockData();
   const price = await GetStockPrice(selectedStock);
