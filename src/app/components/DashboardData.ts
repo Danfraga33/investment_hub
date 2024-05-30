@@ -6,14 +6,29 @@ import { PrismaClient } from "@prisma/client";
 
 import { NextResponse } from "next/server";
 
-export async function DashboardData() {
+export async function PortfolioData() {
   try {
     const data = await db.portfolio.findMany({
-      include: {
-        user: true,
-        stocks: true,
+      select: {
+        name: true,
+        stocks: {
+          select: {
+            stock: {
+              select: {
+                industry: true,
+                symbol: true,
+                logo: true,
+                exchange: true,
+                last: true,
+                marketCapitalization: true,
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
+    // Find selected PORTFOLIO here
     return NextResponse.json(data);
   } catch (error) {
     console.error(error);
@@ -35,31 +50,33 @@ export async function AddStock(
     `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`,
   );
   const profileData = await profile.json();
-  console.log("PROFLE", profileData);
 
-  await prisma.stock.create({
+  const stock = await prisma.stock.update({
+    where: {
+      symbol: symbol,
+    },
     data: {
-      name,
-      symbol,
-      portfolioId,
       last: data.c,
-      // marketCapitalization: profileData.marketCapitalization,
       percentageChange: data.dp,
       logo: profileData.logo,
+      industry: profileData.finnhubIndustry,
+      marketCapitalization: profileData.marketCapitalization,
+    },
+  });
+
+  await prisma.stocksInPortfolio.create({
+    data: {
+      portfolioId,
+      stockId: stock.id,
     },
   });
 }
 
-export async function DeleteStock(
-  portfolioId: string,
-  name: string,
-  symbol: string,
-) {
-  await prisma.stock.delete({
+export async function DeleteStock(portfolioId: string, stockId: string) {
+  await prisma.stocksInPortfolio.delete({
     where: {
-      name,
-      symbol,
       portfolioId,
+      stockId,
     },
   });
 }
@@ -74,7 +91,7 @@ export async function AddPortfolio(name: string, userId: string) {
 
 export async function StockData() {
   try {
-    const data = await db.stockDB.findMany({
+    const data = await db.stock.findMany({
       take: 15,
     });
     return NextResponse.json(data);
@@ -105,8 +122,21 @@ export async function getFinancialsPastFiveYears(symbol: string) {
         year: number;
         netSalesValue: number;
       };
+
+      type financialData = {
+        report: {
+          ic: {
+            concept: string;
+            unit: string;
+            label: string;
+            value: number;
+          };
+        };
+        year: number;
+      };
+
       const netSales: NetSalesData[] = [];
-      data.data.forEach((item) => {
+      data.data.forEach((item: financialData) => {
         // Find the line item corresponding to net sales
         const incomeStatement = item.report.ic;
         const netSalesItem = incomeStatement[0];
@@ -159,8 +189,8 @@ export async function GetStockPrice(stockSymbol: string) {
     const res = await fetch(
       `https://finnhub.io/api/v1/quote?symbol=${stockSymbol}&token=${process.env.FINNHUB_API_KEY}`,
     );
-    const data = await res.json();
-    return data;
+
+    return await res.json();
   } catch (error) {
     throw new Error(`Failed to fetch`);
   }
@@ -170,8 +200,7 @@ export async function GetEPSSuprise(stockSymbol: string) {
     const res = await fetch(
       `https://finnhub.io/api/v1/stock/earnings?symbol=${stockSymbol}&token=${process.env.FINNHUB_API_KEY}`,
     );
-    const data = await res.json();
-    return data;
+    return await res.json();
   } catch (error) {
     throw new Error(`Failed to fetch`);
   }
@@ -196,5 +225,4 @@ export async function GetEPSSuprise(stockSymbol: string) {
 //     (data) => data.BID_CURVE_DATE == "10-MAY-24",
 //   )[0].LIST_G_BC_CAT;
 
-//   console.log(recentData);
 // }

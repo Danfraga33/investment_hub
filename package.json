@@ -4,10 +4,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npx prisma generate --no-engine && next dev",
+    "dev": "npx prisma generate && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.12",
@@ -16,6 +17,8 @@
     "@hookform/resolvers": "^3.3.4",
     "@langchain/community": "^0.0.41",
     "@langchain/openai": "^0.0.22",
+    "@neondatabase/serverless": "^0.9.0",
+    "@prisma/adapter-neon": "^5.11.0",
     "@prisma/adapter-pg": "^5.12.1",
     "@prisma/client": "5.12.1",
     "@prisma/extension-accelerate": "^1.0.0",
@@ -100,7 +103,9 @@
     "@types/pg": "^8.11.2",
     "@types/react": "^18.2.8",
     "@types/react-dom": "^18",
+    "@types/ws": "^8.5.10",
     "autoprefixer": "^10.0.1",
+    "bufferutil": "^4.0.8",
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
     "eslint-plugin-unused-imports": "^3.1.0",

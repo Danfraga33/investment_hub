@@ -1,22 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init 
-
 generator client {
   provider = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
-  engineType = "library"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")  
-  directUrl = env("DIRECT_URL")
 }
-
-
 
 model User {
   id            String          @id @default(cuid())
@@ -37,29 +27,31 @@ model Portfolio {
   name      String
   userId    String
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  stocks    Stock[]
+  stocks    StocksInPortfolio[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
 
 model Stock {
   id          String     @id @default(cuid())
-  logo String?
   name        String
   symbol      String     @unique
+  exchange String?
+  industry String? 
+  marketCapitalization Int?
   last Decimal?
   percentageChange Decimal?
-  portfolioId String
-  portfolio   Portfolio  @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  logo String?
+  portfolios   StocksInPortfolio[]  
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
-
-model StockDB {
-  id String @id @default(cuid())
-  Name String
-  Symbol String @unique 
-  Exchange String
+model StocksInPortfolio {
+  stock       Stock     @relation(fields: [stockId], references: [id])
+  stockId     String
+  portfolio   Portfolio @relation(fields: [portfolioId ], references: [id])
+  portfolioId String
+  @@id([stockId, portfolioId])
 }
  
 model Account {
