@@ -11,21 +11,27 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { DashboardData } from "../components/DashboardData";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { getPortfolio } from "../components/DashboardData";
+import { auth } from "@/lib/auth";
 
 const Holdings = async () => {
-  const Portfolio = await DashboardData();
-  const PortfolioData = await Portfolio.json();
-  const DPortfolio = PortfolioData.find(
-    (portfolio) => portfolio.name === "Defensive",
-  );
+  const session = await auth();
+  if (!session || !session.user) {
+    return <h1>USER NOT FOUND</h1>;
+  }
+  const userId = session?.user?.id ?? "";
 
-  const topStock = DPortfolio.stocks.reduce(
-    (max, stock) =>
-      stock.percentageChange > max.percentageChange ? stock : max,
-    DPortfolio.stocks[0],
+  const Portfolio = await getPortfolio(userId);
+  if (!Portfolio) {
+    return <p>NO PORTFOLIO FOUND</p>;
+  }
+  console.log("HELLO", Portfolio); // Defensive
+
+  const topStock = Portfolio.stocks.reduce(
+    (max, stock) => (stock.stock.last > max.last ? stock : max),
+    Portfolio.stocks[0],
   );
 
   return (
@@ -73,16 +79,16 @@ const Holdings = async () => {
                 <Badge
                   variant="secondary"
                   className={cn("font-semibold text-right cursor-default  ", {
-                    "bg-green-300": Number(topStock.percentageChange) > 0,
-                    "bg-red-300": Number(topStock.percentageChange) < 0,
+                    "bg-green-300": Number(topStock.stock.percentageChange) > 0,
+                    "bg-red-300": Number(topStock.stock.percentageChange) < 0,
                   })}
                 >
-                  {Number(topStock.percentageChange).toFixed(2)}%
+                  {Number(topStock.stock.percentageChange).toFixed(2)}%
                 </Badge>
               </div>
               <div>
                 <p className="text-lg text-[#14142B] font-semibold">
-                  {topStock.symbol}
+                  {topStock.stock.symbol}
                 </p>
                 <p className="text-sm text-[#6E7191]">Top Performing Stock</p>
               </div>
@@ -120,13 +126,13 @@ const Holdings = async () => {
             </div>
             <Table>
               <TableBody>
-                {DPortfolio.stocks.map((stock) => (
+                {Portfolio.stocks.map((stock) => (
                   <TableRow className="cursor-default" key={stock.id}>
                     <TableCell className="font-medium">
                       <div className="flex items-center space-x-2">
                         <Image
                           src={
-                            stock.logo ??
+                            stock.stock.logo ??
                             "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/BHP.AX.png"
                           }
                           className="rounded-xl"
@@ -137,9 +143,11 @@ const Holdings = async () => {
                         <CreditCardIcon className="text-[#6E7191] h-6 w-6" />
                         <div>
                           <p className="text-sm font-medium text-[#14142B]">
-                            {stock.symbol}
+                            {stock.stock.symbol}
                           </p>
-                          <p className="text-xs text-[#6E7191]">{stock.name}</p>
+                          <p className="text-xs text-[#6E7191]">
+                            {stock.stock.name}
+                          </p>
                         </div>
                       </div>
                     </TableCell>
@@ -147,18 +155,23 @@ const Holdings = async () => {
                     <TableCell
                       className={cn("font-semibold text-right", {
                         "text-green-500/95": Number(stock.percentageChange) > 0,
-                        "text-red-500/95": Number(stock.percentageChange) < 0,
+                        "text-red-500/95":
+                          Number(stock.stock.percentageChange) < 0,
                       })}
                     >
-                      {Number(stock.percentageChange).toFixed(2) ?? 0}%
+                      {Number(stock.stock.percentageChange).toFixed(2) ?? 0}%
                     </TableCell>
 
                     <TableCell className="text-right font-bold">
-                      ${stock.last}
+                      ${stock.stock.last}
                     </TableCell>
                     <TableCell className="text-right">
                       <Button variant="outline" asChild>
-                        <Link href={`/Dashboard/${stock.symbol}`}>Analyze</Link>
+                        <Link
+                          href={`/Dashboard/${Portfolio.id}/${stock.stock.id}/Overview`}
+                        >
+                          Analyze
+                        </Link>
                       </Button>
                     </TableCell>
                   </TableRow>

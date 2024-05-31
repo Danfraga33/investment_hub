@@ -2,35 +2,23 @@
 
 import { CompanyNewsProps } from "./DashboardPages/Overview";
 import { useSearchParams } from "next/navigation";
-import { PortfolioWithStocks } from "@/app/Dashboard/Insights/page";
-import { NewsPageProps } from "@/app/Dashboard/page";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { Portfolios } from "../DashboardData";
 
 const CompanyNewsComponent = ({
   companyNews,
-  collectionOfPortfolios,
-  newsData,
+  selectedPortfolio,
 }: {
-  newsData: NewsPageProps;
-  collectionOfPortfolios: PortfolioWithStocks[];
+  selectedPortfolio: Portfolios;
   companyNews: CompanyNewsProps[];
 }) => {
   const searchParams = useSearchParams();
   const portfolioParams = searchParams.get("p");
   const stockParams = searchParams.get("s");
 
-  const selectedPortfolio = collectionOfPortfolios?.find(
-    (portfolio) => portfolio.id === portfolioParams,
-  );
   const selectedStock = selectedPortfolio?.stocks?.find(
-    (stock) => stock.symbol === stockParams,
+    (stock) => stock.stock.symbol === stockParams,
   );
 
   return (

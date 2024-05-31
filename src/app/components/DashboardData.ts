@@ -10,9 +10,12 @@ import { NextResponse } from "next/server";
  * Get all the portfolios
  * @returns {Portfolios} Collections of portfolios
  */
-export async function getPortfolios() {
+export async function getAllPortfolios(userId: string) {
   // TODO: Protect by checking user
   return await db.portfolio.findMany({
+    where: {
+      userId,
+    },
     select: {
       name: true,
       id: true,
@@ -23,6 +26,36 @@ export async function getPortfolios() {
               id: true,
               industry: true,
               symbol: true,
+              percentageChange: true,
+              logo: true,
+              exchange: true,
+              last: true,
+              marketCapitalization: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+}
+export async function getPortfolio(userId: string) {
+  // TODO: Protect by checking user
+  return await db.portfolio.findFirst({
+    where: {
+      userId,
+    },
+    select: {
+      name: true,
+      id: true,
+      stocks: {
+        select: {
+          stock: {
+            select: {
+              id: true,
+              industry: true,
+              symbol: true,
+              percentageChange: true,
               logo: true,
               exchange: true,
               last: true,
@@ -36,7 +69,7 @@ export async function getPortfolios() {
   });
 }
 
-export type Portfolios = Awaited<ReturnType<typeof getPortfolios>>;
+export type Portfolios = Awaited<ReturnType<typeof getPortfolio>>;
 
 export async function AddStock(
   portfolioId: string,
