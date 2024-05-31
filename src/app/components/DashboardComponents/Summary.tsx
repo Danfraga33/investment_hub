@@ -7,8 +7,6 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 export const SummaryData = () => {
-  // const firstStock = collectionOfPortfolios[0].stocks[0].symbol;
-  // const revenue = getFinancialsPastFiveYears(firstStock);
   return (
     <Tabs defaultValue="risk">
       <TabsList>
