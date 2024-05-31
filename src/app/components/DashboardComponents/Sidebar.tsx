@@ -7,18 +7,19 @@ import {
 } from "@/components/ui/tooltip";
 import { Bot, Home, LineChart, NotebookText } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
 import { UserNav } from "./UserNav";
 import { cn } from "@/lib/utils";
-import { usePathname, useSearchParams } from "next/navigation";
 
-export const Sidebar = () => {
+export const Sidebar = ({
+  portfolioId,
+  stockId,
+}: {
+  portfolioId: string;
+  stockId: string;
+}) => {
   const [selected, setSelected] = useState("/Dashboard");
-  const params = usePathname();
-  console.log(params);
-  const paramsArr = params.split("/");
-  const ticker = paramsArr[paramsArr.length - 1];
-  console.log(ticker);
+  console.log(portfolioId, stockId);
 
   return (
     <aside className="z-99 fixed inset-y-0 left-0 z-10 hidden w-14 mt-14 flex-col border-r bg-background sm:flex">
@@ -27,7 +28,7 @@ export const Sidebar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href={`/Dashboard/${ticker}/Overview`}
+                href={`/Dashboard/${portfolioId}/${stockId}/Overview`}
                 className={cn(
                   "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
                   selected === "/Dashboard"
@@ -47,14 +48,14 @@ export const Sidebar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href={`/Dashboard/${ticker}/Insights`}
+                href={`/Dashboard/${portfolioId}/${stockId}/Insights`}
                 className={cn(
                   "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
                   selected === "/Dashboard/Insights"
                     ? "bg-accent"
                     : "text-muted-foreground",
                 )}
-                onClick={() => setSelected("/Dashboard/Portfolio")}
+                onClick={() => setSelected("/Dashboard/Insights")}
               >
                 <NotebookText className="h-5 w-5" />
                 <span className="sr-only">Insights</span>
@@ -67,7 +68,7 @@ export const Sidebar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href={`/Dashboard/${ticker}/PDFChat`}
+                href={`/Dashboard/${portfolioId}/${stockId}/PDFChat`}
                 className={cn(
                   "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
                   selected === "/Dashboard/PDFChat"
@@ -90,7 +91,7 @@ export const Sidebar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href={`/Dashboard/${ticker}/Analytics`}
+                href={`/Dashboard/${portfolioId}/${stockId}/Analytics`}
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
                 onClick={() => setSelected("/Dashboard/Analytics")}
               >
