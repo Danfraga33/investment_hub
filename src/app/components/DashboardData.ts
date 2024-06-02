@@ -39,8 +39,10 @@ export async function getAllPortfolios(userId: string) {
     },
   });
 }
+
 export async function getPortfolio(userId: string) {
-  // TODO: Protect by checking user
+  /** @todo Protect by checking user */
+  // This is excessive, you are drilling down just for the stock information.
   return await db.portfolio.findFirst({
     where: {
       userId,
@@ -61,6 +63,8 @@ export async function getPortfolio(userId: string) {
               last: true,
               marketCapitalization: true,
               name: true,
+              updatedAt: true,
+              createdAt: true,
             },
           },
         },
