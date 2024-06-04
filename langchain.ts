@@ -6,7 +6,7 @@ import {
 import { ChatSum } from "./OpenAI";
 
 // Part one only
-export async function getPartOne() {
+export async function getPartOne(name: string, symbol: string) {
   const fetchURL = await fetch(
     "https://www.sec.gov/Archives/edgar/data/1318605/000156459021004599/tsla-10k_20201231.htm",
   );
@@ -32,15 +32,15 @@ export async function getPartOne() {
   });
   const riskFactorsSection = part1Split[1].pageContent.trim();
 
-  const riskFactorsParagraph = await secondSplitter.createDocuments([
-    riskFactorsSection,
-  ]);
+  //   const riskFactorsParagraph = await secondSplitter.createDocuments([
+  //     riskFactorsSection,
+  //   ]);
 
-  //   const summarizedParagraph = riskFactorsParagraph.map(async (paragraph) => {
-  //     const text = paragraph.pageContent;
-  //     const data = await ChatSum(text);
-  //     return data;
-  //   });
-  //   console.log(summarizedParagraph);
+  // const summarizedParagraph = riskFactorsParagraph.map(async (paragraph) => {
+  //   const text = paragraph.pageContent;
+  //   const data = await ChatSum(text);
+  //   return data;
+  // });
+
+  console.log(riskFactorsSection);
 }
-getPartOne();
