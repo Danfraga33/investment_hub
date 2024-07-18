@@ -5,7 +5,7 @@
 // export async function GPT(docs: any) {
 //   const model = new OpenAI({
 //     temperature: 0.3,
-//     openAIApiKey: "sk-proj-JSbitKpfqOYwPWtlbYuDT3BlbkFJXswtKWvDhBPP5enwlHBk",
+//     openAIApiKey: process.env.OPENAI_API_KEY,
 //   });
 
 //   const chain = loadSummarizationChain(model, { type: "map_reduce" });
@@ -19,7 +19,7 @@
 // export async function ChatSum(text: string) {
 //   const model = new ChatOpenAI({
 //     temperature: 0.4,
-//     openAIApiKey: "sk-proj-JSbitKpfqOYwPWtlbYuDT3BlbkFJXswtKWvDhBPP5enwlHBk",
+//     openAIApiKey: process.env.OPENAI_API_KEY,
 //   });
 //   const prompt = ChatPromptTemplate.fromMessages([
 //     [
@@ -38,16 +38,32 @@
 //   // return result.lc_kwargs.content;
 // }
 
-import { openai } from "@ai-sdk/openai";
-import { generateObject, generateText, streamObject, streamText } from "ai";
-import { z } from "zod";
+// import { openai } from "@ai-sdk/openai";
+// import { generateObject, generateText, streamObject, streamText } from "ai";
+// import { z } from "zod";
+
+// export async function ChatSum(docs: any) {
+//   const result = await generateText({
+//     model: openai("gpt-3.5-turbo"),
+//     prompt: `Summarize ${docs} as someone providing insights.`,
+//   });
+
+//   console.log(result.text);
+// }
+
+import { GoogleGenerativeAI } from "@google/generative-ai";
 require("dotenv").config();
 
-export async function ChatSum(docs: any) {
-  const result = await generateText({
-    model: openai("gpt-3.5-turbo"),
-    prompt: `Summarize ${docs} as someone providing insights.`,
-  });
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
 
-  console.log(result.text);
+async function run() {
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  const prompt = "Write a short story about a magic backpack.";
+
+  const result = await model.generateContent(prompt);
+  const response = result.response;
+  const text = response.text();
+  console.log(text);
 }
+run();
