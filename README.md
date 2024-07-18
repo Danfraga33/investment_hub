@@ -18,6 +18,9 @@ Technologies user:
 - React-PDF
 - D3 Charts
 
+
+
+TO-DO
 - [] Landing Page
 - [] Login in Function - Data is stored in DB upon successful login
 - [] Create custom Login page
